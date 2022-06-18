@@ -1,7 +1,7 @@
-import { BaseCommand, BaseController, BaseQueries, BaseRepository } from "src/bases";
-import { Permissions } from "src/constants";
-import { NoPermissionException } from "src/exceptions";
-import { Session } from "src/models";
+import { BaseCommand, BaseController, BaseQueries, BaseRepository } from "../bases";
+import { Permissions } from "../constants";
+import { NoPermissionException } from "../exceptions";
+import { Session } from "../models";
 
 const executeRequest = (controller: BaseController, args: any[], originalMethod: any) => {
     for(const item of args) {

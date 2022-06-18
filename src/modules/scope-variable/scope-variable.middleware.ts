@@ -1,8 +1,8 @@
 import { Inject, Injectable, NestMiddleware, Scope } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { ScopeVariable } from './scope-variable.model';
-import { HeaderKeys } from 'src/constants'
-import { CommonHelper } from 'src/helpers';
+import { HeaderKeys } from '../../constants'
+import { CommonHelper } from '../../helpers';
 import { ConfigService } from '@nestjs/config';
 import { REQUEST } from '@nestjs/core';
 

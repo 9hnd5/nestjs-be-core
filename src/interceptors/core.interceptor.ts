@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { SuccessResponseModel } from 'src/models';
+import { SuccessResponseModel } from '../models';
 
 export class CoreResponseInterceptor<T>
   implements NestInterceptor<T, SuccessResponseModel> {

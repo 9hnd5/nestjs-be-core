@@ -1,5 +1,5 @@
 import { Injectable, Scope } from "@nestjs/common";
-import { BaseRepository } from "src/bases";
+import { BaseRepository } from "../../../bases";
 import { ExampleModel } from "../models";
 
 @Injectable({ scope: Scope.TRANSIENT })

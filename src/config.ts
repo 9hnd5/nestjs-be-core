@@ -1,4 +1,4 @@
-import * as config from 'config/config.json'
+import * as config from '../config/config.json'
 import { merge } from 'lodash'
 
 export class CoreConfigModel {

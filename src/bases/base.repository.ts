@@ -1,7 +1,7 @@
 import mariadb from 'mariadb'
-import { DalHelper } from 'src/helpers/dal.helper';
-import * as config from 'src/config'
-import { ScopeVariable } from 'src/modules/scope-variable';
+import { DalHelper } from '../helpers/dal.helper';
+import * as config from '../config'
+import { ScopeVariable } from '../modules/scope-variable';
 
 export class BaseRepository {
     private scopeVariable: ScopeVariable;

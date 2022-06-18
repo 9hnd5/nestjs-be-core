@@ -4,12 +4,8 @@ import { AbstractRequestHandler, CQRSRequest, getRequestHandlerType, RequestHand
 
 @Injectable({ scope: Scope.REQUEST })
 export class Mediator {
-  private readonly moduleRef: ModuleRef;
-  private readonly httpRequest: any;
 
-  public constructor(moduleRef: ModuleRef, @Inject(REQUEST) httpRequest: any) {
-    this.moduleRef = moduleRef;
-    this.httpRequest = httpRequest;
+  public constructor(private moduleRef: ModuleRef, @Inject(REQUEST) private httpRequest: any) {
   }
 
   public async send<T, TRequest extends CQRSRequest<T>>(request: TRequest): Promise<T> {

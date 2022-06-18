@@ -1,5 +1,5 @@
-import { NOT_PERMISSION_MESSAGE } from 'src/constants';
-import { ErrorResponseModel } from 'src/models';
+import { NOT_PERMISSION_MESSAGE } from '../constants';
+import { ErrorResponseModel } from '../models';
 
 export class BusinessException extends ErrorResponseModel {
     constructor(message: string | undefined) {

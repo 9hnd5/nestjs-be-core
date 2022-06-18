@@ -1,4 +1,4 @@
-import { CoreModel } from "src/models"
+import { CoreModel } from "../models"
 
 export class BaseModel extends CoreModel {
     public isDeleted: boolean;

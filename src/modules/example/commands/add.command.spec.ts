@@ -1,4 +1,4 @@
-import { BusinessException } from 'src/exceptions';
+import { BusinessException } from '../../../exceptions';
 import { AddCommand, AddCommandHandler } from './add.command'
 
 describe('Example module, command tests', () => {

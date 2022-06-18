@@ -1,7 +1,7 @@
 import { Injectable, Scope } from "@nestjs/common";
 import Redis from 'ioredis'
 import { ConfigService } from "@nestjs/config";
-import { get } from 'src/config'
+import { get } from '../../config'
 
 @Injectable({ scope: Scope.DEFAULT })
 export class RedisCachingService {

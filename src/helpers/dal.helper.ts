@@ -1,5 +1,5 @@
 import * as mariadb from 'mariadb'
-import * as config from 'src/config'
+import * as config from '../config'
 
 export class DalHelper {
     public static async getConnection(connectionString = ''): Promise<mariadb.Connection> {

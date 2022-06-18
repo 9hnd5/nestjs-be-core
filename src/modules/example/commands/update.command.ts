@@ -1,7 +1,7 @@
-import { ExampleModel } from "src/modules/shared/models";
-import { BaseCommand, BaseCommandHandler } from "src/bases";
-import { ExampleRepository } from "src/modules/shared/repositories/example.repository";
-import { RequestHandler } from "src/modules/cqrs";
+import { ExampleModel } from "../../shared/models";
+import { BaseCommand, BaseCommandHandler } from "../../../bases";
+import { ExampleRepository } from "../../shared/repositories/example.repository";
+import { RequestHandler } from "../../cqrs";
 
 export class UpdateCommand extends BaseCommand<ExampleModel> {
     constructor(

@@ -1,5 +1,5 @@
-import { BaseModel } from "src/bases";
-import { Column, Table, Key } from "src/decorators";
+import { BaseModel } from "../../../bases";
+import { Column, Table, Key } from "../../../decorators";
 
 @Table('icc_example')
 export class ExampleModel extends BaseModel {

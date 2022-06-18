@@ -4,8 +4,8 @@ import {
     ExceptionFilter,
     Logger,
 } from '@nestjs/common'
-import { BusinessException } from 'src/exceptions';
-import { ErrorResponseModel } from 'src/models';
+import { BusinessException } from '../exceptions';
+import { ErrorResponseModel } from '../models';
 
 @Catch()
 export class GlobalExceptionsFilter implements ExceptionFilter {
