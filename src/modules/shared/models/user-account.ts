@@ -1,7 +1,6 @@
 
-import { BaseModel } from "src/bases";
-import { Column, Key, Table, TableColumns } from "src/decorators";
-import { TenantBaseModel } from "src/models";
+import { Column, Key, Table, TableColumns } from "../../../decorators";
+import { TenantBaseModel } from "../../../../src/models";
 
 
 @TableColumns(['id', 'username','password', 'email', 'displayName', 'phoneNumber','securityPassword'

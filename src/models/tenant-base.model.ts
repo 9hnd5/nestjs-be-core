@@ -1,9 +1,8 @@
-import { BaseModel } from "src/bases";
-import { Column, TableColumns } from "src/decorators";
-import { CoreModel } from "./core.model";
+import { BaseModel } from "../bases";
+import { Column, TableColumns } from "../decorators";
 
 @TableColumns(['companyId'])
-export class TenantBaseModel {
+export class TenantBaseModel extends BaseModel {
     @Column('company_id')
     public companyId: number;
 }

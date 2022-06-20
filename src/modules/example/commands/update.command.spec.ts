@@ -1,5 +1,5 @@
 import { BusinessException } from 'src/exceptions';
-import { ExampleQueries } from 'src/modules/shared/queries/example.queries';
+import { ExampleQueries } from '../../../../src/modules/shared/queries/example.queries';
 import { UpdateCommand, UpdateCommandHandler } from './update.command'
 
 describe('Example module, command tests', () => {

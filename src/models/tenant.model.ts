@@ -1,5 +1,4 @@
-import { BaseModel } from "src/bases";
-import { Column, TableColumns } from "src/decorators";
+import { Column, TableColumns } from "../decorators";
 
 @TableColumns(['companyId'])
 export class TenantModel {
