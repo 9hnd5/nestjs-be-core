@@ -1,10 +1,10 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import { BaseModel } from "../../../src/bases";
 import { getColumn, getColumnList, getKey, getTableName } from "../../../src/decorators";
 import { TenantBaseModel, TenantModel } from "../../../src/models";
 import { ScopeVariable } from "../../../src/modules/scope-variable";
 import { format } from 'date-fns';
+import { BaseModel } from "../../../src/models/base.model";
 
 @Injectable({ scope: Scope.REQUEST })
 export class QueriesCreatingService {

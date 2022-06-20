@@ -1,4 +1,4 @@
-import { BaseModel } from "../bases";
+import { BaseModel } from "./base.model";
 import { Column, TableColumns } from "../decorators";
 
 @TableColumns(['companyId'])

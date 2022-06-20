@@ -1,5 +1,6 @@
-import { BaseModel } from "../../../bases";
+import { BaseModel } from "../../../../src/models/base.model";
 import { Column, Table, Key, TableColumns } from "../../../decorators";
+
 
 @TableColumns(['id','name'])
 @Table('icc_example')
