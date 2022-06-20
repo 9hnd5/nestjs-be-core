@@ -1,4 +1,4 @@
-import { BaseModel } from "../../../../src/models/base.model";
+import { BaseModel } from "../../../models/base.model";
 import { Column, Table, Key, TableColumns } from "../../../decorators";
 
 

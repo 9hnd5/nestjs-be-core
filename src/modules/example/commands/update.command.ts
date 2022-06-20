@@ -2,8 +2,8 @@ import { ExampleModel } from "../../shared/models";
 import { BaseCommand, BaseCommandHandler } from "../../../bases";
 import { ExampleRepository } from "../../shared/repositories/example.repository";
 import { RequestHandler } from "../../cqrs";
-import { BusinessException } from "../../../../src/exceptions";
-import { ExampleQueries } from "../../../../src/modules/shared/queries/example.queries";
+import { BusinessException } from "../../../exceptions";
+import { ExampleQueries } from "../../../modules/shared/queries/example.queries";
 
 export class UpdateCommand extends BaseCommand<ExampleModel> {
     constructor(

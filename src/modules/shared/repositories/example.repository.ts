@@ -1,5 +1,5 @@
 import { Injectable, Scope } from "@nestjs/common";
-import { QueriesCreatingService } from "../../../../src";
+import { QueriesCreatingService } from "../../../modules";
 import { BaseRepository } from "../../../bases";
 import { ExampleModel } from "../models";
 

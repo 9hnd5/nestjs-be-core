@@ -1,11 +1,9 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import { getColumn, getColumnList, getKey, getTableName } from "../../../src/decorators";
-import { TenantBaseModel, TenantModel } from "../../../src/models";
-import { ScopeVariable } from "../../../src/modules/scope-variable";
-import { format } from 'date-fns';
-import { BaseModel } from "../../../src/models/base.model";
-
+import { getColumn, getColumnList, getKey, getTableName } from "../../decorators";
+import { TenantBaseModel, TenantModel, BaseModel } from "../../models";
+import { ScopeVariable } from "../../modules/scope-variable";
+import * as moment from 'moment'
 @Injectable({ scope: Scope.REQUEST })
 export class QueriesCreatingService {
     public scopeVariable!: ScopeVariable;
@@ -23,13 +21,13 @@ export class QueriesCreatingService {
             return valueObj === true ? "1" : "0";
         }
         else if (valueObj instanceof Date) {
-            return `'${format(valueObj,'yyyyMMddHHmmss')}'`;
+            return `'${moment(valueObj).format('YYYY-MM-DD HH:mm:ss')}'`;
         }
         else if (typeof valueObj === 'number') {
             return `${valueObj}`;
         }
         else {
-            return `'${valueObj.toString().replaceAll(/'/g, "''").replaceAll(/\\/g, "\\\\")}'`;
+            return `'${valueObj.toString().replace(/'/g, "''").replace(/\\/g, "\\\\")}'`;
         }
     }
 

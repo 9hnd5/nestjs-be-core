@@ -1,5 +1,5 @@
 import { Column,TableColumns } from "../decorators";
-import { CoreModel } from "."
+import { CoreModel } from "./core.model";
 
 @TableColumns(['isDeleted','createdDate','createdBy', 'modifiedDate','modifiedBy'])
 export class BaseModel extends CoreModel {
