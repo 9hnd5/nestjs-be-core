@@ -1,11 +1,20 @@
-import { BaseModel } from "src/bases";
+import { Inject, Injectable, Scope } from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
+import { BaseModel } from "src/bases/base.model";
 import { getColumn, getColumnList, getKey, getTableName } from "src/decorators";
 import { TenantBaseModel, TenantModel } from "src/models";
+import { ScopeVariable } from "src/modules/scope-variable";
+import { format } from 'date-fns';
 
+@Injectable({ scope: Scope.REQUEST })
+export class QueriesCreatingService {
+    public scopeVariable!: ScopeVariable;
 
-export class QueriesCreatingHelper
-{
-    public static GetSQLValue(valueObj: object)
+    constructor(@Inject(REQUEST) req: any) {
+        this.scopeVariable = req.scopeVariable
+    }
+
+    public getSQLValue(valueObj: object)
     {
         if (valueObj == null) {
             return "NULL";
@@ -14,22 +23,23 @@ export class QueriesCreatingHelper
             return valueObj === true ? "1" : "0";
         }
         else if (valueObj instanceof Date) {
-            return `'${valueObj.toDateString()}'`;
+            return `'${format(valueObj,'yyyyMMddHHmmss')}'`;
         }
         else if (typeof valueObj === 'number') {
             return `${valueObj}`;
         }
         else {
-            return `'${valueObj.toString().replace("'", "''").replace("\\", "\\\\")}'`;
+            return `'${valueObj.toString().replaceAll(/'/g, "''").replaceAll(/\\/g, "\\\\")}'`;
         }
     }
 
-    public static CreateQueryInsert(obj: any) {
+    public createQueryInsert(obj: any) 
+    {
         let columnNames = '';
         let values = '';
-        getColumnList(obj).map((c) => {
+        getColumnList(obj).forEach((c) => {
             columnNames +=  `${getColumn(obj, c) || c},`;
-            values += `${this.GetSQLValue(obj[c])},`;
+            values += `${this.getSQLValue(obj[c])},`;
         })
 
         if (columnNames.length > 0)
@@ -40,16 +50,16 @@ export class QueriesCreatingHelper
         return `INSERT INTO ${getTableName(obj)} (${columnNames}) VALUES (${values});SELECT LAST_INSERT_ID();`;
     }
 
-    public static CreateQueryUpdate(obj: any) {
+    public createQueryUpdate(obj: any) {
         let columnValues = '';
         let condition = "WHERE 1";
-        getColumnList(obj).map((c) => 
+        getColumnList(obj).forEach((c) => 
         {
             if (getKey(obj, c)) {
-                columnValues += `${getColumn(obj,c) || c} = ${this.GetSQLValue(obj[c])},`;
+                columnValues += `${getColumn(obj,c) || c} = ${this.getSQLValue(obj[c])},`;
             }
             else {
-                condition += ` AND ${getColumn(obj,c) || c} = ${this.GetSQLValue(obj[c])}`;
+                condition += ` AND ${getColumn(obj,c) || c} = ${this.getSQLValue(obj[c])}`;
             }
         })
 
@@ -60,14 +70,14 @@ export class QueriesCreatingHelper
         return `UPDATE ${getTableName(obj)} SET ${columnValues} ${condition}`;
     }
 
-    public static CreateQueryDelete(obj: any, conditions: string) 
+    public createQueryDelete(obj: any, conditions: string) 
     {
         if(obj instanceof BaseModel || obj instanceof TenantBaseModel) 
         {
             let sql = `UPDATE ${getTableName(obj)} SET is_deleted = 1 WHERE 1 = 1`;
             if (obj instanceof TenantBaseModel)
             {
-                conditions += ` AND company_id = ${0}`;
+                conditions += ` AND company_id = ${this.scopeVariable.tenantId}`;
             }
             if (conditions)
             {
@@ -80,7 +90,7 @@ export class QueriesCreatingHelper
             let sql = `DELETE FROM ${getTableName(obj)} WHERE 1 = 1`;
             if (obj instanceof TenantBaseModel)
             {
-                conditions += ` AND company_id = 0`;
+                conditions += ` AND company_id = ${this.scopeVariable.tenantId}`;
             }
             if (conditions)
             {
@@ -90,7 +100,7 @@ export class QueriesCreatingHelper
         }
     }
 
-    public static CreateQuerySelect(obj: any, condition: string, isGetDeletedData: boolean = false) 
+    public createQuerySelect(obj: any, condition: string, isGetDeletedData: boolean = false) 
     {
         if (!condition) {
             condition = `WHERE 1`;
@@ -105,10 +115,10 @@ export class QueriesCreatingHelper
 
         if (obj instanceof TenantBaseModel || obj instanceof TenantModel)
         {
-            condition += ` AND company_id = 0`;
+            condition += ` AND company_id = ${this.scopeVariable.tenantId}`;
         }
         let columnNames = '';
-        getColumnList(obj).map((c) => 
+        getColumnList(obj).forEach((c) => 
         {
             let columnName = '';
             if (getColumn(obj,c))
@@ -125,7 +135,7 @@ export class QueriesCreatingHelper
         return `SELECT ${columnNames} FROM ${getTableName(obj)} ${condition}`;
     }
 
-    public static CreateQuerySelectCount(obj: any, condition: string, isGetDeletedData: boolean = false){
+    public createQuerySelectCount(obj: any, condition: string, isGetDeletedData: boolean = false){
         
         if (!condition) {
             condition = "WHERE 1";
@@ -141,12 +151,12 @@ export class QueriesCreatingHelper
 
         if (obj instanceof TenantBaseModel || obj instanceof TenantModel)
         {
-            condition += ` AND company_id = 0`;
+            condition += ` AND company_id = ${this.scopeVariable.tenantId}`;
         }
         return `SELECT COUNT(*) FROM ${getTableName(obj)} ${condition}`;
     }
 
-    public static CreateQuerySelectTop(obj: any, top: number, skip: number, orderBy: string = 'CreatedDate', condition: string = '', isGetDeletedData: boolean = false){
+    public createQuerySelectTop(obj: any, top: number, skip: number, orderBy: string = 'CreatedDate', condition: string = '', isGetDeletedData: boolean = false){
 
         if (!condition) {
             condition = "WHERE 1";
@@ -160,11 +170,11 @@ export class QueriesCreatingHelper
         }
 
         if (obj instanceof TenantBaseModel || obj instanceof TenantModel) {
-            condition += ` AND company_id = 0`;
+            condition += ` AND company_id = ${this.scopeVariable.tenantId}`;
         }
 
         let columnNames = '';
-        getColumnList(obj).map((c) => 
+        getColumnList(obj).forEach((c) => 
         {
             var columnName = '';
             if (getColumn(obj,c))
@@ -183,7 +193,7 @@ export class QueriesCreatingHelper
                 LIMIT ${top} OFFSET ${skip};`; 
     }
 
-    public static CreateQueryUpdateWithCondition(obj: any, condition: string) 
+    public createQueryUpdateWithCondition(obj: any, condition: string) 
     {
             if (!condition) {
                 condition = `WHERE 1`;
@@ -192,14 +202,14 @@ export class QueriesCreatingHelper
                 condition = `WHERE ${condition}`;
             }
             let columnValues = '';
-            getColumnList(obj).map((c) => 
+            getColumnList(obj).forEach((c) => 
             {
                 let columnName = '';
                 if (getColumn(obj,c))
                 {
                     columnName = getColumn(obj,c);
                 }
-                columnValues += `${columnName} = ${this.GetSQLValue(obj[c])},`;
+                columnValues += `${columnName} = ${this.getSQLValue(obj[c])},`;
             })
 
             if (columnValues) {
@@ -209,7 +219,7 @@ export class QueriesCreatingHelper
             return `UPDATE ${getTableName(obj)} SET ${columnValues} ${condition}`;
     }
 
-    public static CreateQuerySelectId(obj: any, condition: string ,isGetDeletedData: boolean = false)
+    public createQuerySelectId(obj: any, condition: string ,isGetDeletedData: boolean = false)
     {
         if (!condition) {
             condition = `WHERE 1`;
@@ -225,8 +235,10 @@ export class QueriesCreatingHelper
 
         if (obj instanceof TenantBaseModel || obj instanceof TenantModel)
         {
-            condition += ` AND company_id = 0`;
+            condition += ` AND company_id = ${this.scopeVariable.tenantId}`;
         }
-        return `SELECT id FROM ${getTableName(obj)} {condition}`;
+        return `SELECT id FROM ${getTableName(obj)} ${condition}`;
     }
 }
+
+

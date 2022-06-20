@@ -21,6 +21,12 @@ export class AddCommandHandler extends BaseCommandHandler<AddCommand, ExampleMod
     public async apply(command: AddCommand): Promise<ExampleModel> {
         if (!command.data) throw new BusinessException('Dữ liệu không được bỏ trống')
         command.data = await this.createBuild(command.data, command.session);
-        return await this.exampleRepository.add(command.data);
+        var dataNew = new ExampleModel();
+        dataNew.id = command.data.id;
+        dataNew.name = command.data.name;
+        dataNew.createdDate = command.data.createdDate;
+        dataNew.createdBy = command.data.createdBy;
+        dataNew.isDeleted = command.data.isDeleted;
+        return await this.exampleRepository.add(dataNew);
     }
 }

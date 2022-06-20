@@ -7,7 +7,7 @@ import { TenantBaseModel } from "src/models";
 @TableColumns(['id', 'username','password', 'email', 'displayName', 'phoneNumber','securityPassword'
 ,'passwordResetCode','isExternalUser','isSuperAdmin','isActived','isUsed','employeeId','customerId'])
 @Table('icc_user_account')
-export class UserAccount extends BaseModel {
+export class UserAccount extends TenantBaseModel {
     @Key()
     @Column('id')
     public id: number;
