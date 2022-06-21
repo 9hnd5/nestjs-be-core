@@ -37,7 +37,7 @@ export class ExampleController extends BaseController {
     }
 
     @Post('')
-   // @Authorization('exampleManagement', Permissions.Insert, true)
+    @Authorization('exampleManagement', Permissions.Insert, true)
     async add(@Body() command: AddCommand) {
         return this.mediator.send(command);
     }

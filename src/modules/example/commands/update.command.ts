@@ -4,12 +4,15 @@ import { ExampleRepository } from "../../shared/repositories/example.repository"
 import { RequestHandler } from "../../cqrs";
 import { BusinessException } from "../../../exceptions";
 import { ExampleQueries } from "../../../modules/shared/queries/example.queries";
+import { Type } from "class-transformer";
 
 export class UpdateCommand extends BaseCommand<ExampleModel> {
-    constructor(
-        public data: ExampleModel
-    ) { 
+    @Type( () => ExampleModel)
+    public data: ExampleModel;
+
+    constructor( data: ExampleModel) { 
         super()
+        this.data = data;
     }
 }
 
