@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { BaseCommand, BaseCommandHandler } from "../../../bases";
 import { BusinessException } from "../../../exceptions";
 import { RequestHandler } from "../../cqrs";
@@ -5,10 +6,13 @@ import { ExampleModel } from "../../shared/models";
 import { ExampleRepository } from "../../shared/repositories/example.repository";
 
 export class AddCommand extends BaseCommand<ExampleModel> {
-    constructor(
-        public data: ExampleModel
-    ) { 
+
+    @Type( () => ExampleModel)
+    public data: ExampleModel;
+
+    constructor( data: ExampleModel) { 
         super()
+        this.data = data;
     }
 }
 
