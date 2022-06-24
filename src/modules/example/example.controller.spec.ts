@@ -1,8 +1,4 @@
-import { ExampleController } from './example.controller';
 import { ExampleQueries } from "../shared/queries/example.queries";
-import { Mediator } from "../cqrs";
-import { BusinessException } from 'src/exceptions';
-import { ExampleModel } from '../shared/models';
 
 describe('ExampleController', () => {
     beforeEach(async () => {

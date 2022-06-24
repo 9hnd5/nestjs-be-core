@@ -12,7 +12,7 @@ export class QueriesCreatingService {
         this.scopeVariable = req.scopeVariable
     }
 
-    public getSQLValue(valueObj: object)
+    public getSQLValue(valueObj: any)
     {
         if (valueObj == null) {
             return "NULL";
@@ -53,7 +53,7 @@ export class QueriesCreatingService {
         let condition = "WHERE 1";
         getColumnList(obj).forEach((c) => 
         {
-            if (getKey(obj, c)) {
+            if (!getKey(obj, c)) {
                 columnValues += `${getColumn(obj,c) || c} = ${this.getSQLValue(obj[c])},`;
             }
             else {
@@ -186,9 +186,7 @@ export class QueriesCreatingService {
             columnNames = columnNames.substring(0, columnNames.length - 1);
         }
 
-        return `SELECT ${columnNames} FROM ${getTableName(obj)} ${condition}
-                ORDER BY ${orderBy}
-                LIMIT ${top} OFFSET ${skip};`; 
+        return `SELECT ${columnNames} FROM ${getTableName(obj)} ${condition} ORDER BY ${orderBy} LIMIT ${top} OFFSET ${skip};`; 
     }
 
     public createQueryUpdateWithCondition(obj: any, condition: string) 

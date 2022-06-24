@@ -10,8 +10,7 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionsFilter())
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true,
-      transformOptions: { enableImplicitConversion: true }
+      transform: true
     }),
   );
   const config = new DocumentBuilder()

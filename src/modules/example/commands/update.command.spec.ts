@@ -1,4 +1,4 @@
-import { BusinessException } from 'src/exceptions';
+import { BusinessException } from '../../../exceptions';
 import { ExampleQueries } from '../../../modules/shared/queries/example.queries';
 import { UpdateCommand, UpdateCommandHandler } from './update.command'
 
