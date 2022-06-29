@@ -1,10 +1,10 @@
-import { ExampleModel } from "../../shared/models";
-import { BaseCommand, BaseCommandHandler } from "../../../bases";
-import { ExampleRepository } from "../../shared/repositories/example.repository";
-import { RequestHandler } from "../../cqrs";
-import { BusinessException } from "../../../exceptions";
-import { ExampleQueries } from "../../../modules/shared/queries/example.queries";
+import { BaseCommand, BaseCommandHandler } from "bases/base.command";
 import { Type } from "class-transformer";
+import { BusinessException } from "exceptions/error.exception";
+import { RequestHandler } from "modules/cqrs";
+import { ExampleModel } from "modules/shared";
+import { ExampleQueries } from "modules/shared/queries/example.queries";
+import { ExampleRepository } from "modules/shared/repositories/example.repository";
 
 export class UpdateCommand extends BaseCommand<ExampleModel> {
     @Type( () => ExampleModel)

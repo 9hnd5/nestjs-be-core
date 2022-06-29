@@ -9,7 +9,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -27,4 +27,7 @@
     "src/**/*.json",
     "config/*.json"
   ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

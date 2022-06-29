@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CommonModule } from '../common';
-import { ScopeVariableModule } from '../scope-variable';
+import { CommonModule } from 'modules/common';
+import { ScopeVariableModule } from 'modules/scope-variable';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
 

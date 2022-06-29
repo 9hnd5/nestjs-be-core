@@ -1,4 +1,4 @@
-import { ExampleQueries } from "../shared/queries/example.queries";
+import { ExampleQueries } from "modules/shared/queries/example.queries";
 
 describe('ExampleController', () => {
     beforeEach(async () => {

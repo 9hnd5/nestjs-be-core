@@ -1,4 +1,5 @@
-import { Column,TableColumns } from "../decorators";
+import { Column } from "decorators/column.decorator";
+import { TableColumns } from "decorators/table.decorator";
 import { CoreModel } from "./core.model";
 
 @TableColumns(['isDeleted','createdDate','createdBy', 'modifiedDate','modifiedBy'])

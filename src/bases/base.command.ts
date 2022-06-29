@@ -1,6 +1,7 @@
-import { Session } from "../models";
-import { AbstractRequestHandler, CQRSRequest } from "../modules/cqrs";
-import { BaseModel } from "../models";
+import { BaseModel } from "models/base.model";
+import { Session } from "models/session.model";
+import { AbstractRequestHandler, CQRSRequest } from "modules/cqrs";
+
 
 export class BaseCommand<T> extends CQRSRequest<T> {
     public session: Session;

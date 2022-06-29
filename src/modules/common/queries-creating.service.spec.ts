@@ -1,4 +1,4 @@
-import { ExampleModel, QueriesCreatingService } from "../../modules";
+import { ExampleModel, QueriesCreatingService } from "modules";
 
 describe('QueriesCreatingService', () => {
 

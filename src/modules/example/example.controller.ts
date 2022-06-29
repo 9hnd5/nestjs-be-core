@@ -1,14 +1,14 @@
 import { Body, Controller, Delete, Get, Injectable, Post, Put, Scope, UseInterceptors, Param, Inject } from "@nestjs/common";
-import { BaseController } from "../../bases";
-import { ExampleQueries } from "../shared/queries/example.queries";
 import { AddCommand, DeleteCommand, UpdateCommand } from "./commands";
-import { CoreResponseInterceptor } from "../../interceptors/core.interceptor";
-import { BusinessException } from "../../exceptions";
-import { Mediator } from "../cqrs";
 import { ApiTags } from "@nestjs/swagger";
-import { Authorization } from "../../decorators";
 import { REQUEST } from "@nestjs/core";
-import { Permissions } from "../../constants";
+import { Mediator } from "modules/cqrs";
+import { ExampleQueries } from "modules/shared/queries/example.queries";
+import { Permissions } from "constants/const";
+import { CoreResponseInterceptor } from "interceptors/core.interceptor";
+import { BaseController } from "bases/base.controller";
+import { Authorization } from "decorators/authorization.decorator";
+import { BusinessException } from "exceptions/error.exception";
 
 @Controller('/core/v1/example')
 @Injectable({ scope: Scope.REQUEST })

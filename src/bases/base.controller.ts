@@ -1,6 +1,6 @@
-import { Session } from "../models";
-import getInstance, { CachingService } from "../modules/caching";
-import { ScopeVariable } from "../modules/scope-variable";
+import { Session } from "models/session.model";
+import getInstance, { CachingService } from "modules/caching";
+import { ScopeVariable } from "modules/scope-variable";
 
 export class BaseController {
     public readonly scopeVariable: ScopeVariable;

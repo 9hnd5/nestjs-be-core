@@ -1,5 +1,5 @@
 import { Injectable, Scope } from "@nestjs/common";
-import { BaseQueries } from "../../../bases/base.queries";
+import { BaseQueries } from "bases/base.queries";
 import { ExampleModel } from "../models";
 
 @Injectable({ scope: Scope.TRANSIENT })

@@ -1,6 +1,6 @@
+import { DalHelper } from 'helpers/dal.helper';
 import mariadb from 'mariadb'
-import { DalHelper } from '../helpers/dal.helper';
-import { ScopeVariable } from '../modules/scope-variable';
+import { ScopeVariable } from 'modules/scope-variable';
 import * as config from '../config'
 
 export class BaseQueries {

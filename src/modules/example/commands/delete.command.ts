@@ -1,8 +1,8 @@
-import { ExampleModel } from "../../shared/models";
-import { BaseCommand, BaseCommandHandler } from "../../../bases";
-import { ExampleRepository } from "../../shared/repositories/example.repository";
-import { ExampleQueries } from "../../shared/queries/example.queries";
-import { RequestHandler } from "../../cqrs";
+import { BaseCommand, BaseCommandHandler } from "bases/base.command";
+import { RequestHandler } from "modules/cqrs";
+import { ExampleModel } from "modules/shared";
+import { ExampleQueries } from "modules/shared/queries/example.queries";
+import { ExampleRepository } from "modules/shared/repositories/example.repository";
 
 export class DeleteCommand extends BaseCommand<ExampleModel> {
     constructor(

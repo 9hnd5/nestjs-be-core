@@ -1,6 +1,8 @@
 
-import { Column, Key, Table, TableColumns } from "../../../decorators";
-import { TenantBaseModel } from '../../../models';
+import { Column } from "decorators/column.decorator";
+import { Key } from "decorators/key.decorator";
+import { Table, TableColumns } from "decorators/table.decorator";
+import { TenantBaseModel } from "models/tenant-base.model";
 
 @TableColumns(['id', 'username','password', 'email', 'displayName', 'phoneNumber','securityPassword'
 ,'passwordResetCode','isExternalUser','isSuperAdmin','isActived','isUsed','employeeId','customerId'])
