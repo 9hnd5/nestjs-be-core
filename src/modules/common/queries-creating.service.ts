@@ -1,8 +1,12 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import { getColumn, getColumnList, getKey, getTableName } from "../../decorators";
-import { TenantBaseModel, TenantModel, BaseModel } from "../../models";
-import { ScopeVariable } from "../../modules/scope-variable";
+import { getColumn } from "decorators/column.decorator";
+import { getKey } from "decorators/key.decorator";
+import { getColumnList, getTableName } from "decorators/table.decorator";
+import { BaseModel } from "models/base.model";
+import { TenantBaseModel } from "models/tenant-base.model";
+import { TenantModel } from "models/tenant.model";
+import { ScopeVariable } from "modules/scope-variable";
 import * as moment from 'moment'
 @Injectable({ scope: Scope.REQUEST })
 export class QueriesCreatingService {

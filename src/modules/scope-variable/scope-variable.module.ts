@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CommonModule } from '../common/common.module';
-import { ScopeVariableMiddleWare } from './scope-variable.middleware';
+import { CommonModule } from 'modules/common';
 import { ScopeVariable } from './scope-variable.model';
+import { ScopeVariableMiddleWare } from './scope-variable.middleware';
 
 @Module({
   imports: [

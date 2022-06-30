@@ -1,6 +1,6 @@
 import { Injectable, Scope } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { HttpService } from "../common";
+import { HttpService } from "modules/common";
 
 @Injectable({ scope: Scope.REQUEST })
 export class HealthService {

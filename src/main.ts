@@ -2,8 +2,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { GlobalExceptionsFilter } from './filters';
 import * as pgk from '../package.json'
+import { GlobalExceptionsFilter } from 'filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

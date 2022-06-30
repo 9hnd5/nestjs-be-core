@@ -1,4 +1,4 @@
-import { Session } from "../../models";
+import { Session } from "models/session.model";
 
 export class ScopeVariable {
     accessToken: string;

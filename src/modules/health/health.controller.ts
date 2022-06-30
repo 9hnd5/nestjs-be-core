@@ -1,8 +1,8 @@
 import { Controller, Get, Injectable, Scope } from "@nestjs/common";
-import { BaseController } from "../../bases";
-import { HealthService } from "./health.service";
-import { ScopeVariable } from "../scope-variable";
 import { ApiTags } from "@nestjs/swagger";
+import { BaseController } from "bases/base.controller";
+import { ScopeVariable } from "modules/scope-variable";
+import { HealthService } from "./health.service";
 
 @Controller('health')
 @Injectable({ scope: Scope.REQUEST })

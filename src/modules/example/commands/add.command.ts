@@ -1,9 +1,9 @@
+import { BaseCommand, BaseCommandHandler } from "bases/base.command";
 import { Type } from "class-transformer";
-import { BaseCommand, BaseCommandHandler } from "../../../bases";
-import { BusinessException } from "../../../exceptions";
-import { RequestHandler } from "../../cqrs";
-import { ExampleModel } from "../../shared/models";
-import { ExampleRepository } from "../../shared/repositories/example.repository";
+import { BusinessException } from "exceptions/error.exception";
+import { RequestHandler } from "modules/cqrs";
+import { ExampleModel } from "modules/shared";
+import { ExampleRepository } from "modules/shared/repositories/example.repository";
 
 export class AddCommand extends BaseCommand<ExampleModel> {
 
