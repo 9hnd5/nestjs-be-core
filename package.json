@@ -1,6 +1,6 @@
 {
   "name": "be-core",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "author": "",
   "license": "UNLICENSED",
@@ -76,7 +76,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/icc-repositories/be-core"
+    "url": "https://github.com/hoangnguyenoneicc/nestjs-be-core"
   },
   "jest": {
     "moduleFileExtensions": [
