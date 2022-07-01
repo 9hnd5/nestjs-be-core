@@ -33,7 +33,7 @@ export class DalHelper {
         }
     }
 
-    public static async query<T>(sql: string, connection: mariadb.Connection): Promise<T> {
+    public static async query<T>(sql: string, connection: mariadb.Connection = undefined): Promise<T[]> {
         let newConn = false;
         try {
             if (!connection) {
@@ -50,14 +50,13 @@ export class DalHelper {
         }
     }
 
-    public static async queryMultiple(sql: string, connection: mariadb.Pool): Promise<any[]> {
+    public static async queryMultiple(sql: string, connection: mariadb.Pool = undefined): Promise<any[]> {
         let newConn = false;
         try {
             if (!connection) {
                 connection = await DalHelper.getMultipleQueriesConnection()
                 newConn = true
             }
-    
             return await connection.query(sql)
         }
         finally {

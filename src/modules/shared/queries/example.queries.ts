@@ -1,22 +1,27 @@
-import { Injectable, Scope } from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
+import { InjectRepository } from "@nestjs/typeorm";
 import { BaseQueries } from "bases/base.queries";
-import { ExampleModel } from "../models";
+import { Repository } from "typeorm";
+import { ExampleModel } from "../models/example.model";
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class ExampleQueries extends BaseQueries {
-    public async get(id: number) {
-        const data = new ExampleModel()
-        data.id = id;
-        data.name = `Example ${id}`
-        return data;
+
+    constructor(@Inject(REQUEST) private request: any,
+        @InjectRepository(ExampleModel) private exampleTestRepository: Repository<ExampleModel>) {
+        super(request)
+    }
+    
+    public async get(id: number): Promise<ExampleModel> {
+        return this.exampleTestRepository.findOne({
+            where: {
+                id
+            }
+        })
     }
 
     public async gets() {
-        const data = new ExampleModel()
-        data.id = 1;
-        data.name = `Example 1`
-        return [
-            data
-        ]
+        return this.exampleTestRepository.findOne({})
     }
 }

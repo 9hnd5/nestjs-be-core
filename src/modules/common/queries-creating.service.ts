@@ -39,9 +39,14 @@ export class QueriesCreatingService {
     {
         let columnNames = '';
         let values = '';
+
+        obj.companyId = this.scopeVariable.tenantId;
+
         getColumnList(obj).forEach((c) => {
-            columnNames +=  `${getColumn(obj, c) || c},`;
-            values += `${this.getSQLValue(obj[c])},`;
+            if (!getKey(obj, c)) {
+                columnNames +=  `${getColumn(obj, c) || c},`;
+                values += `${this.getSQLValue(obj[c])},`;
+            }
         })
 
         if (columnNames.length > 0)
@@ -54,7 +59,10 @@ export class QueriesCreatingService {
 
     public createQueryUpdate(obj: any) {
         let columnValues = '';
-        let condition = "WHERE 1";
+        let condition = "WHERE 1 = 1";
+
+        obj.companyId = this.scopeVariable.tenantId;
+
         getColumnList(obj).forEach((c) => 
         {
             if (!getKey(obj, c)) {
@@ -102,7 +110,7 @@ export class QueriesCreatingService {
         }
     }
 
-    public createQuerySelect(obj: any, condition: string, isGetDeletedData: boolean = false) 
+    public createQuerySelect<T>(TCreator: new() => T, condition: string = '', isGetDeletedData: boolean = false) 
     {
         if (!condition) {
             condition = `WHERE 1`;
@@ -110,6 +118,8 @@ export class QueriesCreatingService {
         else {
             condition = `WHERE ${condition}`;
         }
+
+        const obj: T  = new TCreator()
 
         if (obj instanceof BaseModel && !isGetDeletedData) {
             condition += ` AND is_deleted = 0`;
@@ -137,7 +147,7 @@ export class QueriesCreatingService {
         return `SELECT ${columnNames} FROM ${getTableName(obj)} ${condition}`;
     }
 
-    public createQuerySelectCount(obj: any, condition: string, isGetDeletedData: boolean = false){
+    public createQuerySelectCount<T>(TCreator: new() => T, condition: string = '', isGetDeletedData: boolean = false){
         
         if (!condition) {
             condition = "WHERE 1";
@@ -145,6 +155,8 @@ export class QueriesCreatingService {
         else {
             condition = `WHERE ${condition}`;
         }
+
+        const obj: T  = new TCreator()
 
         if (obj instanceof BaseModel && !isGetDeletedData)
         {
@@ -158,7 +170,7 @@ export class QueriesCreatingService {
         return `SELECT COUNT(*) FROM ${getTableName(obj)} ${condition}`;
     }
 
-    public createQuerySelectTop(obj: any, top: number, skip: number, orderBy: string = 'CreatedDate', condition: string = '', isGetDeletedData: boolean = false){
+    public createQuerySelectTop<T>(TCreator: new() => T, top: number, skip: number, orderBy: string = 'CreatedDate', condition: string = '', isGetDeletedData: boolean = false){
 
         if (!condition) {
             condition = "WHERE 1";
@@ -166,6 +178,8 @@ export class QueriesCreatingService {
         else {
             condition = `WHERE ${condition}`;
         }
+
+        const obj: T  = new TCreator()
 
         if (obj instanceof BaseModel && !isGetDeletedData) {
             condition += ` AND is_deleted = 0`;

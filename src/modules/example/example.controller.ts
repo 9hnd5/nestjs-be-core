@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Injectable, Post, Put, Scope, UseInterceptors, Param, Inject } from "@nestjs/common";
 import { AddCommand, DeleteCommand, UpdateCommand } from "./commands";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiParam, ApiTags } from "@nestjs/swagger";
 import { REQUEST } from "@nestjs/core";
 import { Mediator } from "modules/cqrs";
 import { ExampleQueries } from "modules/shared/queries/example.queries";
@@ -25,31 +25,35 @@ export class ExampleController extends BaseController {
     }
 
     @Get(':id')
-    @Authorization('exampleManagement', Permissions.View, true)
+    @ApiParam({ name: 'id', type: Number })
+    // @Authorization('exampleManagement', Permissions.View, true)
     async get(@Param('id') id: number) {
         return this.exampleQueries.get(id)
     }
 
     @Get('')
-    @Authorization('exampleManagement', Permissions.View, true)
+    // @Authorization('exampleManagement', Permissions.View, true)
     async gets() {
         return this.exampleQueries.gets()
     }
 
     @Post('')
-    @Authorization('exampleManagement', Permissions.Insert, true)
+    @ApiBody({ type: AddCommand })
+    // @Authorization('exampleManagement', Permissions.Insert, true)
     async add(@Body() command: AddCommand) {
         return this.mediator.send(command);
     }
 
     @Put('')
-    @Authorization('exampleManagement', Permissions.Update, true)
+    @ApiBody({ type: UpdateCommand })
+    // @Authorization('exampleManagement', Permissions.Update, true)
     async update(@Body() command: UpdateCommand) {
         return this.mediator.send(command);
     }
 
     @Delete('')
-    @Authorization('exampleManagement', Permissions.Delete)
+    @ApiBody({ type: DeleteCommand })
+    // @Authorization('exampleManagement', Permissions.Delete)
     async delete(@Body() command: DeleteCommand) {
         return this.mediator.send(new DeleteCommand(command.id));
     }

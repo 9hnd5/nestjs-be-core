@@ -5,6 +5,7 @@ import { REQUEST } from '@nestjs/core';
 import { ScopeVariable } from './scope-variable.model';
 import { HeaderKeys } from 'constants/const';
 import { CommonHelper } from 'helpers/common.helper';
+import { DatabaseOption } from 'config';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ScopeVariableMiddleWare implements NestMiddleware {
@@ -31,8 +32,16 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
             // todo
         }
         else {
-            scopeVariable.primarySQLConnectionString = this.configService.get<string>('primarySQLConnectionString').replace('_{0}', '')
-            scopeVariable.secondarySQLConnectionString = this.configService.get<string>('secondarySQLConnectionString').replace('_{0}', '')
+            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')
+            scopeVariable.primary = {
+                ...primary,
+                database: primary.database.replace('_{0}', '')
+            }
+            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')
+            scopeVariable.secondary = {
+                ...secondary,
+                database: secondary.database.replace('_{0}', '')
+            }
             scopeVariable.tenantId = -1;
         }
 

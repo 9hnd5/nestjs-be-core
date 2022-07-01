@@ -1,16 +1,12 @@
-import { Column } from "decorators/column.decorator";
-import { Key } from "decorators/key.decorator";
-import { Table, TableColumns } from "decorators/table.decorator";
 import { TenantBaseModel } from "models/tenant-base.model";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@TableColumns(['id','name'])
-@Table('icc_example')
+@Entity()
 export class ExampleModel extends TenantBaseModel {
 
-    @Key()
-    @Column('id')
+    @PrimaryGeneratedColumn({ name: 'id' })
     public id: number;
 
-    @Column('name')
+    @Column()
     public name: string;
 }

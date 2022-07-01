@@ -6,10 +6,16 @@ import * as config from '../config'
 export class BaseQueries {
     private scopeVariable: ScopeVariable;
 
-    protected _connection: mariadb.Connection | mariadb.Pool;
+    protected _connection: mariadb.Connection;
     protected isJoinTransaction: boolean;
 
-    public joinTransaction(connection: mariadb.Connection | mariadb.Pool) {
+    constructor(
+        request: any
+    ) {
+        this.scopeVariable = request.scopeVariable
+    }
+
+    public joinTransaction(connection: mariadb.Connection) {
         this._connection = connection;
         this.isJoinTransaction = true;
     }
@@ -19,13 +25,13 @@ export class BaseQueries {
         this.isJoinTransaction = false
     }
 
-    get connection() : Promise<mariadb.Connection | mariadb.Pool> {
-        return new Promise(async (resolve) => {
-            if (this._connection) return resolve(this._connection);
+    // get connection() : Promise<mariadb.Connection> {
+    //     return new Promise(async (resolve) => {
+    //         if (this._connection) return resolve(this._connection);
 
-            const connectStr = this.scopeVariable.secondarySQLConnectionString || config.get('secondarySQLConnectionString')
-            this._connection = await DalHelper.getConnection(connectStr)
-            resolve(this._connection);
-        })
-    }
+    //         const connectStr = this.scopeVariable.secondarySQLConnectionString || config.get('secondarySQLConnectionString')
+    //         this._connection = await DalHelper.getConnection(connectStr)
+    //         resolve(this._connection);
+    //     })
+    // }
 }

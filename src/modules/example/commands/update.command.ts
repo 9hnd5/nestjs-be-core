@@ -2,7 +2,7 @@ import { BaseCommand, BaseCommandHandler } from "bases/base.command";
 import { Type } from "class-transformer";
 import { BusinessException } from "exceptions/error.exception";
 import { RequestHandler } from "modules/cqrs";
-import { ExampleModel } from "modules/shared";
+import { ExampleModel } from "modules/shared/models/example.model";
 import { ExampleQueries } from "modules/shared/queries/example.queries";
 import { ExampleRepository } from "modules/shared/repositories/example.repository";
 
@@ -28,7 +28,7 @@ export class UpdateCommandHandler extends BaseCommandHandler<UpdateCommand, Exam
         }
         
         let example = await this.exampleQueries.get(command.data.id);
-
+        console.log(example)
         if (!example) 
         {
             throw new BusinessException('Dữ liệu không tồn tại')

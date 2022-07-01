@@ -1,21 +1,18 @@
-import { Column } from "decorators/column.decorator";
-import { TableColumns } from "decorators/table.decorator";
-import { CoreModel } from "./core.model";
+import { Column } from "typeorm";
 
-@TableColumns(['isDeleted','createdDate','createdBy', 'modifiedDate','modifiedBy'])
-export class BaseModel extends CoreModel {
-    @Column('is_deleted')
+export class BaseModel {
+    @Column({ name: 'is_deleted', type: 'boolean', nullable: false })
     public isDeleted: boolean;
     
-    @Column('created_date')
+    @Column({ name: 'created_date', type: 'datetime', nullable: false })
     public createdDate: Date;
 
-    @Column('created_by')
+    @Column({ name: 'created_by', type: 'int', nullable: false })
     public createdBy: number;
 
-    @Column('modified_date')
+    @Column({ name: 'modified_date', type: 'datetime' })
     public modifiedDate: Date;
 
-    @Column('modified_by')
+    @Column({ name: 'modified_by', type: 'int' })
     public modifiedBy: number;
 }

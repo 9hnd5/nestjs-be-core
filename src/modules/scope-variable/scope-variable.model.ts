@@ -1,3 +1,4 @@
+import { DatabaseOption } from "config";
 import { Session } from "models/session.model";
 
 export class ScopeVariable {
@@ -8,8 +9,8 @@ export class ScopeVariable {
     requestId: string;
     tenantCode: string;
     tenantId: number;
-    primarySQLConnectionString: string;
-    secondarySQLConnectionString: string;
+    primary: DatabaseOption;
+    secondary: DatabaseOption;
 
     // session
     session: Session;

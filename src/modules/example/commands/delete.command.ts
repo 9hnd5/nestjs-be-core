@@ -1,10 +1,10 @@
 import { BaseCommand, BaseCommandHandler } from "bases/base.command";
 import { RequestHandler } from "modules/cqrs";
-import { ExampleModel } from "modules/shared";
+import { ExampleModel } from "modules/shared/models/example.model";
 import { ExampleQueries } from "modules/shared/queries/example.queries";
 import { ExampleRepository } from "modules/shared/repositories/example.repository";
 
-export class DeleteCommand extends BaseCommand<ExampleModel> {
+export class DeleteCommand extends BaseCommand<number> {
     constructor(
         public id: number
     ) { 

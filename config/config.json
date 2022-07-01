@@ -1,1 +1,16 @@
-{}
+{
+    "primarySQLConnection": {
+        "host": "localhost",
+        "port": 3307,
+        "username": "root",
+        "password": "Abcd1234",
+        "database": "test_{0}"
+    },
+    "secondarySQLConnection": {
+        "host": "localhost",
+        "port": 3307,
+        "username": "root",
+        "password": "Abcd1234",
+        "database": "test_{0}"
+    }
+}

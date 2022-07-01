@@ -1,2 +1,0 @@
-export * from './example.model'
-export * from './user-account'

@@ -1,10 +1,18 @@
 import * as config from '../config/config.json'
 import { merge } from 'lodash'
 
+export class DatabaseOption {
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    database: string;
+}
+
 export class CoreConfigModel {
     appName: string;
-    primarySQLConnectionString: string;
-    secondarySQLConnectionString: string;
+    primarySQLConnection: DatabaseOption;
+    secondarySQLConnection: DatabaseOption;
     redis: {
         host: string,
         port: number,
@@ -16,8 +24,10 @@ export class CoreConfigModel {
 const defaultConfig = () => {
     const defaultConfig = new CoreConfigModel()
     defaultConfig.appName = String(process.env.APP_NAME)
-    defaultConfig.primarySQLConnectionString = String(process.env.PRIMARY_CONNECTION_STRING)
-    defaultConfig.secondarySQLConnectionString = String(process.env.SECONDARY_CONNECTION_STRING)
+    // defaultConfig.primarySQLConnectionString = {
+    //     host: 
+    // } String(process.env.PRIMARY_CONNECTION_STRING)
+    // defaultConfig.secondarySQLConnectionString = String(process.env.SECONDARY_CONNECTION_STRING)
     defaultConfig.redis = {
         host: String(process.env.REDIS_HOST),
         port: Number(process.env.REDIS_PORT),

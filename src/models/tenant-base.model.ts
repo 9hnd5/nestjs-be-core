@@ -1,9 +1,8 @@
-import { Column } from "decorators/column.decorator";
-import { TableColumns } from "decorators/table.decorator";
+import { Column } from "typeorm";
 import { BaseModel } from "./base.model";
 
-@TableColumns(['companyId'])
 export class TenantBaseModel extends BaseModel {
-    @Column('company_id')
+
+    @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
     public companyId: number;
 }
