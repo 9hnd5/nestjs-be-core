@@ -1,5 +1,5 @@
 import { BaseCommand, BaseCommandHandler } from "bases/base.command";
-import { RequestHandler } from "modules/cqrs";
+import { RequestHandler } from "modules/cqrs/cqrs.implement";
 import { ExampleModel } from "modules/shared/models/example.model";
 import { ExampleQueries } from "modules/shared/queries/example.queries";
 import { ExampleRepository } from "modules/shared/repositories/example.repository";

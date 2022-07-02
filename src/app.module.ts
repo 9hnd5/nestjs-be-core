@@ -2,10 +2,10 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { REQUEST } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { CachingModule } from "modules/caching";
-import { CommonModule } from "modules/common";
+import { CachingModule } from "modules/caching/caching.module";
+import { CommonModule } from "modules/common/common.module";
 import { ExampleModule } from "modules/example";
-import { HealthModule } from "modules/health";
+import { HealthModule } from "modules/health/health.module";
 import { load } from "./config";
 
 

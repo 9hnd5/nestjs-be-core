@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CommonModule } from 'modules/common';
+import { CommonModule } from 'modules/common/common.module';
 import { ScopeVariable } from './scope-variable.model';
 import { ScopeVariableMiddleWare } from './scope-variable.middleware';
 
