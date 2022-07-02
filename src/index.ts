@@ -25,17 +25,17 @@ export * from "~/exceptions/error.exception";
 //interceptors
 export * from "~/interceptors/core.interceptor";
 
-//shared
-export * from "~/modules/shared/models/example.model";
-export * from "~/modules/shared/queries/example.queries";
-export * from "~/modules/shared/repositories/example.repository";
-export * from "~/modules/shared/shared.module";
-
 //base
 export * from "~/bases/base.command";
 export * from "~/bases/base.controller";
 export * from "~/bases/base.queries";
 export * from "~/bases/base.repository";
+
+//config
+export * from '~/config'
+
+//model
+export * from '~/models'
 
 
 
