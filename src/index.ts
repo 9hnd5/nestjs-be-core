@@ -11,7 +11,6 @@ export * from "~/modules/cqrs/cqrs.module";
 export * from "~/modules/cqrs/mediator.service";
 
 //common
-export * from "~/modules/common/queries-creating.service";
 export * from "~/modules/common/http.service";
 export * from "~/modules/common/common.module";
 
@@ -36,6 +35,9 @@ export * from '~/config'
 
 //model
 export * from '~/models'
+
+//decorator
+export * from '~/decorators'
 
 
 
