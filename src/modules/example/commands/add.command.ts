@@ -1,7 +1,7 @@
 import { BaseCommand, BaseCommandHandler } from "bases/base.command";
 import { Type } from "class-transformer";
 import { BusinessException } from "exceptions/error.exception";
-import { RequestHandler } from "modules/cqrs";
+import { RequestHandler } from "modules/cqrs/cqrs.implement";
 import { ExampleModel } from "modules/shared/models/example.model";
 import { ExampleRepository } from "modules/shared/repositories/example.repository";
 

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommonModule } from 'modules/common';
-import { ScopeVariableModule } from 'modules/scope-variable';
+import { CommonModule } from 'modules/common/common.module';
+import { ScopeVariableModule } from 'modules/scope-variable/scope-variable.module';
 import { ExampleModel } from './models/example.model';
 import QueriesList from './queries'
 import RepositoriesList from './repositories'

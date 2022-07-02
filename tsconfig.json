@@ -9,7 +9,11 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"],
+      "~/*": ["src/*"]
+    },
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -18,16 +22,14 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
-    "lib": [
-      "ES2021.String"
-    ]
+    "lib": ["ES2021.String"]
   },
-  "include":[ 
-    "src/**/*",
-    "src/**/*.json",
-    "config/*.json"
-  ],
+  "include": ["src/**/*", "src/**/*.json", "config/*.json"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
+  },
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true
   }
 }

@@ -6,7 +6,7 @@ import { getColumnList, getTableName } from "decorators/table.decorator";
 import { BaseModel } from "models/base.model";
 import { TenantBaseModel } from "models/tenant-base.model";
 import { TenantModel } from "models/tenant.model";
-import { ScopeVariable } from "modules/scope-variable";
+import { ScopeVariable } from "modules/scope-variable/scope-variable.model";
 import * as moment from 'moment'
 @Injectable({ scope: Scope.REQUEST })
 export class QueriesCreatingService {
