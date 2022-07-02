@@ -39,5 +39,8 @@ export * from '~/models'
 //decorator
 export * from '~/decorators'
 
+//const
+export * from '~/constants'
+
 
 
