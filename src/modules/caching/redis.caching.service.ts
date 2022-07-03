@@ -11,6 +11,7 @@ export class RedisCachingService {
             ...configService.get('redis'),
             lazyConnect: true
         });
+        if (!redisCachingService) redisCachingService = this;
     }
 
     public async get<T>(key: string, hashKey: string): Promise<T | null> {
@@ -61,10 +62,5 @@ export class RedisCachingService {
 }
 
 let redisCachingService: RedisCachingService;
-setTimeout(() => {
-    redisCachingService = new RedisCachingService({
-        get
-    } as any);
-}, 100)
 
 export default () => redisCachingService
