@@ -8,17 +8,24 @@ import { Session } from "models/session.model";
 
 const executeRequest = (controller: BaseController, args: any[], originalMethod: any) => {
     for(const item of args) {
-        const baseClass = Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor;
+        const baseClass = Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item)) 
+            ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor 
+            : null;
         if (baseClass === BaseCommand) {
             item.session = controller.scopeVariable.session;
         }
     }
     Object.keys(controller).forEach((key) => {
-        const item = controller[key];
-        const baseClass = Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor;
-        if (baseClass === BaseQueries || baseClass === BaseRepository) {
-            item.scopeVariable = controller.scopeVariable;
+        try {
+            const item = controller[key];
+            const baseClass = Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item))
+                ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor 
+                : null;
+            if (baseClass === BaseQueries || baseClass === BaseRepository) {
+                item.scopeVariable = controller.scopeVariable;
+            }
         }
+        catch {}
     })
     const result = originalMethod.apply(controller, args);
     return result;
