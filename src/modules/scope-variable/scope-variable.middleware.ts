@@ -30,6 +30,16 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
         scopeVariable.tenantCode = req.headers[HeaderKeys.TenantCode.toLowerCase()]
         if (scopeVariable.tenantCode) {
             // todo
+            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')
+            scopeVariable.primary = {
+                ...primary,
+                database: primary.database.replace('_{0}', scopeVariable.tenantCode)
+            }
+            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')
+            scopeVariable.secondary = {
+                ...secondary,
+                database: secondary.database.replace('_{0}', scopeVariable.tenantCode)
+            }
         }
         else {
             const primary = this.configService.get<DatabaseOption>('primarySQLConnection')
