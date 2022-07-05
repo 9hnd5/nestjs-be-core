@@ -12,6 +12,7 @@ export * from "~/modules/cqrs/mediator.service";
 
 //common
 export * from "~/modules/common/http.service";
+export * from "~/modules/common/http.module";
 export * from "~/modules/common/common.module";
 
 //caching
