@@ -4,6 +4,15 @@ import axios from "axios";
 import { ScopeVariable } from "modules/scope-variable/scope-variable.model";
 import { HttpOption, HTTP_OPTION } from "./http.module";
 
+interface BaseResult {
+  result: number;
+}
+interface SuccessResult extends BaseResult {
+  data: any;
+}
+interface ErrorResult extends BaseResult {
+  errorMessage: string;
+}
 @Injectable({ scope: Scope.REQUEST })
 export class HttpService {
   public scopeVariable!: ScopeVariable;
@@ -16,7 +25,7 @@ export class HttpService {
   }
 
   private getOption(overrideOption: Partial<HttpOption>) {
-    let option = this.registerOption ?? {} as HttpOption;
+    let option = this.registerOption ?? ({} as HttpOption);
 
     if (overrideOption?.url) {
       option.url = overrideOption.url;
@@ -44,20 +53,24 @@ export class HttpService {
     try {
       let response = null;
       if (autoInject) {
-        const { requestId, tenantId, tenantCode } = this.scopeVariable;
+        const { requestId, tenantId, tenantCode, accessToken } =
+          this.scopeVariable;
         response = await axios.get(url, {
           ...config,
-          headers: { requestId, tenantId, tenantCode },
+          headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
         response = await axios.get(url, config);
       }
       return {
-        status: response.status,
+        result: 1,
         data: response.data,
-      };
+      } as SuccessResult;
     } catch (error) {
-      throw error;
+      return {
+        result: -1,
+        errorMessage: error.message,
+      } as ErrorResult;
     }
   }
 
@@ -66,20 +79,24 @@ export class HttpService {
     try {
       let response = null;
       if (autoInject) {
-        const { requestId, tenantId, tenantCode } = this.scopeVariable;
+        const { requestId, tenantId, tenantCode, accessToken } =
+          this.scopeVariable;
         response = await axios.post(url, data, {
           ...config,
-          headers: { requestId, tenantId, tenantCode },
+          headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
-        response = await axios.get(url, config);
+        response = await axios.post(url, data, config);
       }
       return {
-        status: response.status,
+        result: 1,
         data: response.data,
-      };
+      } as SuccessResult;
     } catch (error) {
-      throw error;
+      return {
+        result: -1,
+        errorMessage: error.message,
+      } as ErrorResult;
     }
   }
 
@@ -88,20 +105,24 @@ export class HttpService {
     try {
       let response = null;
       if (autoInject) {
-        const { requestId, tenantId, tenantCode } = this.scopeVariable;
+        const { requestId, tenantId, tenantCode, accessToken } =
+          this.scopeVariable;
         response = await axios.put(url, data, {
           ...config,
-          headers: { requestId, tenantId, tenantCode },
+          headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
-        response = await axios.get(url, config);
+        response = await axios.put(url, data, config);
       }
       return {
-        status: response.status,
+        result: 1,
         data: response.data,
-      };
+      } as SuccessResult;
     } catch (error) {
-      throw error;
+      return {
+        result: -1,
+        errorMessage: error.message,
+      } as ErrorResult;
     }
   }
 
@@ -110,20 +131,24 @@ export class HttpService {
     try {
       let response = null;
       if (autoInject) {
-        const { requestId, tenantId, tenantCode } = this.scopeVariable;
+        const { requestId, tenantId, tenantCode, accessToken } =
+          this.scopeVariable;
         response = await axios.delete(url, {
           ...config,
-          headers: { requestId, tenantId, tenantCode },
+          headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
-        response = await axios.get(url, config);
+        response = await axios.delete(url, config);
       }
       return {
-        status: response.status,
+        result: 1,
         data: response.data,
-      };
+      } as SuccessResult;
     } catch (error) {
-      throw error;
+      return {
+        result: -1,
+        errorMessage: error.message,
+      } as ErrorResult;
     }
   }
 }
