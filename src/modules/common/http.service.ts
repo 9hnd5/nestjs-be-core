@@ -4,15 +4,6 @@ import axios from "axios";
 import { ScopeVariable } from "modules/scope-variable/scope-variable.model";
 import { HttpOption, HTTP_OPTION } from "./http.module";
 
-interface BaseResult {
-  result: number;
-}
-interface SuccessResult extends BaseResult {
-  data: any;
-}
-interface ErrorResult extends BaseResult {
-  errorMessage: string;
-}
 @Injectable({ scope: Scope.REQUEST })
 export class HttpService {
   public scopeVariable!: ScopeVariable;
@@ -62,67 +53,61 @@ export class HttpService {
       } else {
         response = await axios.get(url, config);
       }
-      return {
-        result: 1,
-        data: response.data,
-      } as SuccessResult;
+
+      const { data } = response;
+
+      if (data?.result !== 0) return data?.data;
+      else throw data?.errorMessage;
     } catch (error) {
-      return {
-        result: -1,
-        errorMessage: error.message,
-      } as ErrorResult;
+      throw error.toString();
     }
   }
 
-  async post(data: any, overrideOption: Partial<HttpOption> = null) {
+  async post(body: any, overrideOption: Partial<HttpOption> = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
       let response = null;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
-        response = await axios.post(url, data, {
+        response = await axios.post(url, body, {
           ...config,
           headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
-        response = await axios.post(url, data, config);
+        response = await axios.post(url, body, config);
       }
-      return {
-        result: 1,
-        data: response.data,
-      } as SuccessResult;
+
+      const { data } = response;
+
+      if (data?.result !== 0) return data?.data;
+      else throw data?.errorMessage;
     } catch (error) {
-      return {
-        result: -1,
-        errorMessage: error.message,
-      } as ErrorResult;
+      throw error.toString();
     }
   }
 
-  async put(data: any, overrideOption: Partial<HttpOption> = null) {
+  async put(body: any, overrideOption: Partial<HttpOption> = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
       let response = null;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
-        response = await axios.put(url, data, {
+        response = await axios.put(url, body, {
           ...config,
           headers: { requestId, tenantId, tenantCode, accessToken },
         });
       } else {
-        response = await axios.put(url, data, config);
+        response = await axios.put(url, body, config);
       }
-      return {
-        result: 1,
-        data: response.data,
-      } as SuccessResult;
+
+      const { data } = response;
+
+      if (data?.result !== 0) return data?.data;
+      else throw data?.errorMessage;
     } catch (error) {
-      return {
-        result: -1,
-        errorMessage: error.message,
-      } as ErrorResult;
+      throw error.toString();
     }
   }
 
@@ -140,15 +125,13 @@ export class HttpService {
       } else {
         response = await axios.delete(url, config);
       }
-      return {
-        result: 1,
-        data: response.data,
-      } as SuccessResult;
+      
+      const { data } = response;
+
+      if (data?.result !== 0) return data?.data;
+      else throw data?.errorMessage;
     } catch (error) {
-      return {
-        result: -1,
-        errorMessage: error.message,
-      } as ErrorResult;
+      throw error.toString();
     }
   }
 }
