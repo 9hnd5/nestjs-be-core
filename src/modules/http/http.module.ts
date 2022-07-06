@@ -1,18 +1,11 @@
 import { DynamicModule, Module } from "@nestjs/common";
-import { AxiosRequestConfig } from "axios";
+import { HTTP_OPTION } from "./const";
 import { HttpService } from "./http.service";
-
-export type HttpOption = {
-  url: string;
-  autoInject: boolean;
-  config?: AxiosRequestConfig;
-};
-
-export const HTTP_OPTION = Symbol("HTTP_OPTION");
+import { HttpOption } from "./type";
 
 @Module({})
 export class HttpModule {
-  static register(option: HttpOption = null): DynamicModule {
+  static register(option: HttpOption | null = null): DynamicModule {
     return {
       module: HttpModule,
       providers: [HttpService, { provide: HTTP_OPTION, useValue: option }],

@@ -1,8 +1,11 @@
 import { Inject, Injectable, Scope } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { ScopeVariable } from "modules/scope-variable/scope-variable.model";
-import { HttpOption, HTTP_OPTION } from "./http.module";
+import { HTTP_OPTION } from "./const";
+import { HttpOption } from "./type";
+
+type OverrideOption = Partial<HttpOption> | null;
 
 @Injectable({ scope: Scope.REQUEST })
 export class HttpService {
@@ -15,9 +18,8 @@ export class HttpService {
     this.scopeVariable = req.scopeVariable;
   }
 
-  private getOption(overrideOption: Partial<HttpOption>) {
+  private getOption(overrideOption: OverrideOption) {
     let option = this.registerOption ?? ({} as HttpOption);
-
     if (overrideOption?.url) {
       option.url = overrideOption.url;
     }
@@ -39,10 +41,10 @@ export class HttpService {
    * This method is use to make a http get request to external api and can override the default config
    * @param overrideOption override config for this method
    */
-  async get(overrideOption: Partial<HttpOption> = null) {
+  async get(overrideOption: OverrideOption = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
-      let response = null;
+      let response = {} as AxiosResponse;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
@@ -63,10 +65,10 @@ export class HttpService {
     }
   }
 
-  async post(body: any, overrideOption: Partial<HttpOption> = null) {
+  async post(body: any, overrideOption: OverrideOption = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
-      let response = null;
+      let response = {} as AxiosResponse;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
@@ -87,10 +89,10 @@ export class HttpService {
     }
   }
 
-  async put(body: any, overrideOption: Partial<HttpOption> = null) {
+  async put(body: any, overrideOption: OverrideOption = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
-      let response = null;
+      let response = {} as AxiosResponse;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
@@ -111,10 +113,10 @@ export class HttpService {
     }
   }
 
-  async delete(overrideOption: Partial<HttpOption> = null) {
+  async delete(overrideOption: OverrideOption = null) {
     const { url, autoInject, config } = this.getOption(overrideOption);
     try {
-      let response = null;
+      let response = {} as AxiosResponse;
       if (autoInject) {
         const { requestId, tenantId, tenantCode, accessToken } =
           this.scopeVariable;
@@ -125,7 +127,7 @@ export class HttpService {
       } else {
         response = await axios.delete(url, config);
       }
-      
+
       const { data } = response;
 
       if (data?.result !== 0) return data?.data;

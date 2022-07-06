@@ -4,7 +4,7 @@ import { ScopeVariable } from 'modules/scope-variable/scope-variable.model';
 export class BaseQueries {
     private scopeVariable: ScopeVariable;
 
-    protected _connection: mariadb.Connection;
+    protected _connection: mariadb.Connection | undefined;
     protected isJoinTransaction: boolean;
 
     constructor(
