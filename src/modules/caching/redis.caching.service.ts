@@ -1,7 +1,6 @@
 import { Injectable, Scope } from "@nestjs/common";
-import Redis from 'ioredis'
 import { ConfigService } from "@nestjs/config";
-import { get } from '../../config'
+import Redis from 'ioredis';
 
 @Injectable({ scope: Scope.DEFAULT })
 export class RedisCachingService {
@@ -14,7 +13,7 @@ export class RedisCachingService {
         if (!redisCachingService) redisCachingService = this;
     }
 
-    public async get<T>(key: string, hashKey: string): Promise<T | null> {
+    public async get<T>(key: string, hashKey: any): Promise<T | null> {
         if (!hashKey) {
             const data = await this.client.get(key);
             if (data) {
@@ -31,7 +30,7 @@ export class RedisCachingService {
         return null
     }
 
-    public async set<T>(key: string, hashKey: string, data: T): Promise<void> {
+    public async set<T>(key: string, hashKey: any, data: T): Promise<void> {
         if (!data) return;
 
         if (!hashKey) {
@@ -42,7 +41,7 @@ export class RedisCachingService {
         }
     }
 
-    public async remove(key: string, hashKey: string) {
+    public async remove(key: string, hashKey: any) {
         if (!hashKey) {
             await this.client.del(key)
         }
