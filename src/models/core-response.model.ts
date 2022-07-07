@@ -6,7 +6,7 @@ export class CoreResponseModel {
 
 export class SuccessResponseModel extends CoreResponseModel {
     constructor(data: any) {
-        super()
+        super();
         this.result = 0;
         this.data = data;
     }
@@ -14,7 +14,7 @@ export class SuccessResponseModel extends CoreResponseModel {
 
 export class ErrorResponseModel extends CoreResponseModel {
     constructor(message: string | undefined) {
-        super()
+        super();
         this.result = -1;
         this.errorMessage = message;
     }
@@ -22,7 +22,7 @@ export class ErrorResponseModel extends CoreResponseModel {
 
 export class WarningResponseModel extends CoreResponseModel {
     constructor(message: string | undefined) {
-        super()
+        super();
         this.result = -2;
         this.errorMessage = message;
     }

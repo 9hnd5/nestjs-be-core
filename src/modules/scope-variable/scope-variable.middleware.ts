@@ -12,46 +12,44 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
     constructor(
         private readonly configService: ConfigService,
         @Inject(REQUEST) private request: any
-    ) {
-    }
+    ) {}
 
-    async use(req: Request | any, res: Response, next: NextFunction) {
-        const scopeVariable: ScopeVariable = new ScopeVariable()
+    use(req: Request | any, res: Response, next: NextFunction) {
+        const scopeVariable: ScopeVariable = new ScopeVariable();
 
-        scopeVariable.accessToken = req.headers[HeaderKeys.AccessToken.toLowerCase()]
-        scopeVariable.refreshToken = req.headers[HeaderKeys.RefreshToken.toLowerCase()]
-        scopeVariable.appName = req.headers[HeaderKeys.AppName.toLowerCase()]
-        scopeVariable.appBuildNumber = req.headers[HeaderKeys.AppBuildNumber.toLowerCase()]
-        scopeVariable.requestId = req.headers[HeaderKeys.RequestId.toLowerCase()]
+        scopeVariable.accessToken = req.headers[HeaderKeys.AccessToken.toLowerCase()];
+        scopeVariable.refreshToken = req.headers[HeaderKeys.RefreshToken.toLowerCase()];
+        scopeVariable.appName = req.headers[HeaderKeys.AppName.toLowerCase()];
+        scopeVariable.appBuildNumber = req.headers[HeaderKeys.AppBuildNumber.toLowerCase()];
+        scopeVariable.requestId = req.headers[HeaderKeys.RequestId.toLowerCase()];
         if (!scopeVariable.requestId) {
-            scopeVariable.requestId = CommonHelper.uuidv4()
+            scopeVariable.requestId = CommonHelper.uuidv4();
         }
 
-        scopeVariable.tenantCode = req.headers[HeaderKeys.TenantCode.toLowerCase()]
+        scopeVariable.tenantCode = req.headers[HeaderKeys.TenantCode.toLowerCase()];
         if (scopeVariable.tenantCode) {
             // todo
-            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!
+            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!;
             scopeVariable.primary = {
                 ...primary,
-                database: primary.database.replace('{0}', scopeVariable.tenantCode)
-            }
-            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')!
+                database: primary.database.replace('{0}', scopeVariable.tenantCode),
+            };
+            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')!;
             scopeVariable.secondary = {
                 ...secondary,
-                database: secondary.database.replace('{0}', scopeVariable.tenantCode)
-            }
-        }
-        else {
-            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!
+                database: secondary.database.replace('{0}', scopeVariable.tenantCode),
+            };
+        } else {
+            const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!;
             scopeVariable.primary = {
                 ...primary,
-                database: primary.database.replace('_{0}', '')
-            }
-            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')!
+                database: primary.database.replace('_{0}', ''),
+            };
+            const secondary = this.configService.get<DatabaseOption>('secondarySQLConnection')!;
             scopeVariable.secondary = {
                 ...secondary,
-                database: secondary.database.replace('_{0}', '')
-            }
+                database: secondary.database.replace('_{0}', ''),
+            };
             scopeVariable.tenantId = -1;
         }
 

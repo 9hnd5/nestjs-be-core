@@ -5,7 +5,7 @@ export enum HeaderKeys {
     TenantCode = 'TenantCode',
     Language = 'lang',
     AppName = 'app-name',
-    AppBuildNumber = 'app-build-number'
+    AppBuildNumber = 'app-build-number',
 }
 
 export enum Permissions {
@@ -13,5 +13,5 @@ export enum Permissions {
     Insert,
     Update,
     Delete,
-    All
+    All,
 }

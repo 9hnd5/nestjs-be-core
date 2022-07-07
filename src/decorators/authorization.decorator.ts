@@ -1,37 +1,40 @@
-import { BaseCommand } from "bases/base.command";
-import { BaseController } from "bases/base.controller";
-import { BaseQueries } from "bases/base.queries";
-import { BaseRepository } from "bases/base.repository";
-import { Permissions } from "constants/const";
-import { NoPermissionException } from "exceptions/error.exception";
-import { Session } from "models/session.model";
+import { BaseCommand } from 'bases/base.command';
+import { BaseController } from 'bases/base.controller';
+import { BaseQueries } from 'bases/base.queries';
+import { BaseRepository } from 'bases/base.repository';
+import { Permissions } from 'constants/const';
+import { NoPermissionException } from 'exceptions/error.exception';
+import { Session } from 'models/session.model';
 
 const executeRequest = (controller: BaseController, args: any[], originalMethod: any) => {
-    for(const item of args) {
-        const baseClass = Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item)) 
-            ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor 
-            : null;
+    for (const item of args) {
+        const baseClass =
+            Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item))
+                ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor
+                : null;
         if (baseClass === BaseCommand) {
             item.session = controller.scopeVariable.session;
         }
     }
     Object.keys(controller).forEach((key) => {
-        try {
-            const item = controller[key];
-            const baseClass = Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item))
-                ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor 
+        const item = controller[key];
+        const baseClass =
+            Object.getPrototypeOf(item) && Object.getPrototypeOf(Object.getPrototypeOf(item))
+                ? Object.getPrototypeOf(Object.getPrototypeOf(item)).constructor
                 : null;
-            if (baseClass === BaseQueries || baseClass === BaseRepository) {
-                item.scopeVariable = controller.scopeVariable;
-            }
+        if (baseClass === BaseQueries || baseClass === BaseRepository) {
+            item.scopeVariable = controller.scopeVariable;
         }
-        catch {}
-    })
+    });
     const result = originalMethod.apply(controller, args);
     return result;
-}
+};
 
-export function Authorization (featureName: string, permission: number, isDontNeedLogin: boolean = false) : MethodDecorator {
+export function Authorization(
+    featureName: string,
+    permission: number,
+    isDontNeedLogin = false
+): MethodDecorator {
     return (target: BaseController, propertyKey: string, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
@@ -42,8 +45,10 @@ export function Authorization (featureName: string, permission: number, isDontNe
                 throw new NoPermissionException();
             }
 
-
-            const session: Session = typeof this.getUserSession === 'function' ? await this.getUserSession(accessToken) : null;
+            const session: Session =
+                typeof this.getUserSession === 'function'
+                    ? await this.getUserSession(accessToken)
+                    : null;
             this.scopeVariable.session = session;
 
             if (isDontNeedLogin) {
@@ -56,31 +61,57 @@ export function Authorization (featureName: string, permission: number, isDontNe
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (Array.isArray(session.roles) && !!session.roles.find((r) => r.name === 'Administrator')) {
+            if (
+                Array.isArray(session.roles) &&
+                !!session.roles.find((r) => r.name === 'Administrator')
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (Array.isArray(session.allPermissionFeatures) && session.allPermissionFeatures.includes(featureName)) {
+            if (
+                Array.isArray(session.allPermissionFeatures) &&
+                session.allPermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (permission === Permissions.View && Array.isArray(session.viewPermissionFeatures) && session.viewPermissionFeatures.includes(featureName)) {
+            if (
+                permission === Permissions.View &&
+                Array.isArray(session.viewPermissionFeatures) &&
+                session.viewPermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (permission === Permissions.Insert && Array.isArray(session.allPermissionFeatures) && session.insertPermissionFeatures.includes(featureName)) {
+            if (
+                permission === Permissions.Insert &&
+                Array.isArray(session.allPermissionFeatures) &&
+                session.insertPermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (permission === Permissions.Update && Array.isArray(session.updatePermissionFeatures) && session.updatePermissionFeatures.includes(featureName)) {
+            if (
+                permission === Permissions.Update &&
+                Array.isArray(session.updatePermissionFeatures) &&
+                session.updatePermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (permission === Permissions.Delete && Array.isArray(session.deletePermissionFeatures) && session.deletePermissionFeatures.includes(featureName)) {
+            if (
+                permission === Permissions.Delete &&
+                Array.isArray(session.deletePermissionFeatures) &&
+                session.deletePermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
-            if (permission === Permissions.View && Array.isArray(session.viewPermissionFeatures) && session.viewPermissionFeatures.includes(featureName)) {
+            if (
+                permission === Permissions.View &&
+                Array.isArray(session.viewPermissionFeatures) &&
+                session.viewPermissionFeatures.includes(featureName)
+            ) {
                 return executeRequest(this, args, originalMethod);
             }
 
