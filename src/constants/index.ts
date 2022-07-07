@@ -1,2 +1,2 @@
-export * from './const'
-export * from './message.constant'
+export * from './const';
+export * from './message.constant';

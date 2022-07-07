@@ -1,8 +1,8 @@
 export class Session {
     public userId: number;
     public roles: {
-        id: number,
-        name: string
+        id: number;
+        name: string;
     }[];
     public allPermissionFeatures: string[];
     public insertPermissionFeatures: string[];

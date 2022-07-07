@@ -1,5 +1,5 @@
-import { DatabaseOption } from "config";
-import { Session } from "models/session.model";
+import { DatabaseOption } from 'config';
+import { Session } from 'models/session.model';
 
 export class ScopeVariable {
     accessToken: string;
