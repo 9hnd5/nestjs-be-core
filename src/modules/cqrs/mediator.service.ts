@@ -1,11 +1,6 @@
 import { Inject, Injectable, InternalServerErrorException, Scope, Type } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef, REQUEST } from '@nestjs/core';
-import {
-    AbstractRequestHandler,
-    CQRSRequest,
-    getRequestHandlerType,
-    RequestHandler,
-} from './cqrs.implement';
+import { AbstractRequestHandler, CQRSRequest, getRequestHandlerType, RequestHandler } from './cqrs.implement';
 
 @Injectable({ scope: Scope.REQUEST })
 export class Mediator {
@@ -19,11 +14,9 @@ export class Mediator {
         const resolvedRequestHandlers: AbstractRequestHandler<T, TRequest>[] = [];
         for (const requestHandlerType of requestHandlerTypes) {
             // MAGIC SAUCE
-            const resolvedRequestHandler = await this.moduleRef.resolve(
-                requestHandlerType,
-                contextId,
-                { strict: false }
-            );
+            const resolvedRequestHandler = await this.moduleRef.resolve(requestHandlerType, contextId, {
+                strict: false,
+            });
             resolvedRequestHandlers.push(resolvedRequestHandler as any);
         }
         if (resolvedRequestHandlers.length === 0) {

@@ -2,9 +2,12 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { REQUEST } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CachingModule } from 'modules/caching/caching.module';
+import { AppController } from 'app.controller';
+import { AuthModule } from 'modules/auth/auth.module';
+import { CacheModule } from 'modules/cache/cache.module';
 import { CommonModule } from 'modules/common/common.module';
 import { HealthModule } from 'modules/health/health.module';
+import { InitialModule } from 'modules/initial/initial.module';
 import { load } from './config';
 
 @Module({
@@ -15,7 +18,9 @@ import { load } from './config';
         }),
         HealthModule,
         CommonModule,
-        CachingModule,
+        AuthModule,
+        CacheModule,
+        InitialModule,
         TypeOrmModule.forRootAsync({
             useFactory: (request: any) => ({
                 type: 'mysql',
@@ -30,5 +35,6 @@ import { load } from './config';
             inject: [REQUEST],
         }),
     ],
+    controllers: [AppController],
 })
 export class AppModule {}

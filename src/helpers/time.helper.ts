@@ -1,11 +1,4 @@
-import {
-    endOfQuarter,
-    getQuarter,
-    startOfQuarter,
-    startOfMonth,
-    endOfMonth,
-    compareDesc,
-} from 'date-fns';
+import { endOfQuarter, getQuarter, startOfQuarter, startOfMonth, endOfMonth, compareDesc } from 'date-fns';
 export class TimeHelper {
     public static getQuarterOfYear = (date: Date) => getQuarter(date);
 

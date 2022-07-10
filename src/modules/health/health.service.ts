@@ -1,8 +1,8 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from 'modules/http/http.service';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class HealthService {
     constructor(private configService: ConfigService, private httpService: HttpService) {}
 

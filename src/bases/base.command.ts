@@ -1,15 +1,11 @@
-import { BaseModel } from 'models/base.model';
-import { Session } from 'models/session.model';
+import { BaseModel, Session } from 'models/common.model';
 import { AbstractRequestHandler, CQRSRequest } from 'modules/cqrs/cqrs.implement';
 
 export class BaseCommand<T> extends CQRSRequest<T> {
     public session: Session;
 }
 
-export abstract class BaseCommandHandler<
-    T extends BaseCommand<R>,
-    R
-> extends AbstractRequestHandler<T, R> {
+export abstract class BaseCommandHandler<T extends BaseCommand<R>, R> extends AbstractRequestHandler<T, R> {
     public async handle(command: T): Promise<R> {
         return this.apply(command);
     }

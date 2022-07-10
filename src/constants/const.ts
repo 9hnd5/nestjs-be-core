@@ -7,11 +7,3 @@ export enum HeaderKeys {
     AppName = 'app-name',
     AppBuildNumber = 'app-build-number',
 }
-
-export enum Permissions {
-    View,
-    Insert,
-    Update,
-    Delete,
-    All,
-}

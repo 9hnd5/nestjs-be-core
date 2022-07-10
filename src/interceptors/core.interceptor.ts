@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { SuccessResponseModel } from 'models/core-response.model';
+import { SuccessResponse } from 'models/response.model';
 
-export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessResponseModel> {
+export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessResponse> {
     intercept(
         context: ExecutionContext,
         next: CallHandler<T>
-    ): Observable<SuccessResponseModel> | Promise<Observable<SuccessResponseModel>> {
-        return next.handle().pipe(map((data) => new SuccessResponseModel(data)));
+    ): Observable<SuccessResponse> | Promise<Observable<SuccessResponse>> {
+        return next.handle().pipe(map((data) => new SuccessResponse(data)));
     }
 }
