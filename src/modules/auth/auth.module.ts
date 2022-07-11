@@ -5,7 +5,7 @@ import { RedisCacheService } from 'modules/cache/redis-cache.service';
 import { SessionModule } from 'modules/session/session.module';
 import { AuthService } from './auth.service';
 import { AuthorizeGuard } from './guards/auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard as AuthenticateGuard } from './guards/jwt-auth.guard';
 import { JwtStrategy } from './strategies/jwt-strategy';
 
 @Module({
@@ -16,7 +16,7 @@ import { JwtStrategy } from './strategies/jwt-strategy';
         AuthService,
         {
             provide: APP_GUARD,
-            useClass: JwtAuthGuard,
+            useClass: AuthenticateGuard,
         },
         {
             provide: APP_GUARD,
