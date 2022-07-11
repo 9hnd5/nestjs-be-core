@@ -20,7 +20,6 @@ import { JwtStrategy } from './strategies/jwt-strategy';
         },
         {
             provide: APP_GUARD,
-            scope: Scope.REQUEST,
             useClass: AuthorizeGuard,
         },
     ],

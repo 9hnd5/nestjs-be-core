@@ -1,10 +1,10 @@
-import { CanActivate, ExecutionContext, Injectable, Scope } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { includes } from 'lodash';
 import { AUTHORIZE_KEY, Permission } from 'modules/auth/decorators/auth.decorator';
 import { SessionService } from 'modules/session/session.service';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class AuthorizeGuard implements CanActivate {
     constructor(private ref: Reflector, private sessionService: SessionService) {}
 
@@ -13,8 +13,8 @@ export class AuthorizeGuard implements CanActivate {
         if (!authData) return true;
 
         const request = context.switchToHttp().getRequest();
-        const { accessToken } = request.scopeVariable;
-        const session = await this.sessionService.getByAccessToken(accessToken);
+        const { accessToken, tenantCode } = request.scopeVariable;
+        const session = await this.sessionService.getByAccessToken(accessToken, tenantCode);
 
         if (!session) return false;
         const { permission, featureName } = authData;

@@ -1,57 +1,47 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { ScopeVariable, Session } from 'models/common.model';
+import { Injectable } from '@nestjs/common';
+import { Session } from 'models/common.model';
 import { RedisCacheService } from 'modules/cache/redis-cache.service';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class SessionService {
-    private scopeVariable: ScopeVariable;
-    constructor(private cacheService: RedisCacheService, @Inject(REQUEST) request: any) {
-        this.scopeVariable = request.scopeVariable;
-    }
+    constructor(private cacheService: RedisCacheService) {}
 
-    getByAccessToken(accessToken: string) {
-        const { tenantCode } = this.scopeVariable;
+    getByAccessToken(accessToken: string, tenantCode: string) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${accessToken}` : accessToken;
         key = `A:${key}`;
 
         return this.cacheService.get(key);
     }
 
-    setByAccessToken(accessToken: string, session: Session) {
-        const tenantCode = this.scopeVariable.tenantCode;
+    setByAccessToken(accessToken: string, tenantCode: string, session: Session) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${accessToken}` : accessToken;
         key = `A:${key}`;
 
         return this.cacheService.set(key, '', session);
     }
 
-    removeByAccessToken(accessToken: string) {
-        const tenantCode = this.scopeVariable.tenantCode;
+    removeByAccessToken(accessToken: string, tenantCode: string) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${accessToken}` : accessToken;
         key = `A:${key}`;
 
         return this.cacheService.remove(key);
     }
 
-    getByRefreshToken(refreshToken: string) {
-        const tenantCode = this.scopeVariable.tenantCode;
+    getByRefreshToken(refreshToken: string, tenantCode: string) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${refreshToken}` : refreshToken;
         key = `R:${key}`;
 
         return this.cacheService.get(key);
     }
 
-    setByRefreshToken(refreshToken: string, session: Session) {
-        const tenantCode = this.scopeVariable.tenantCode;
+    setByRefreshToken(refreshToken: string, tenantCode: string, session: Session) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${refreshToken}` : refreshToken;
         key = `R:${key}`;
 
         return this.cacheService.set(key, '', session);
     }
 
-    removeByRefreshToken(refreshToken: string) {
-        const tenantCode = this.scopeVariable.tenantCode;
+    removeByRefreshToken(refreshToken: string, tenantCode: string) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${refreshToken}` : refreshToken;
         key = `R:${key}`;
 
