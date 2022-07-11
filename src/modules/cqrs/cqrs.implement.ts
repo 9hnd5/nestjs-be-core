@@ -11,15 +11,10 @@ const staticRequestHandlerMap: Map<
     Type<AbstractRequestHandler<any, CQRSRequest<any>>>[]
 > = new Map();
 
-export function RequestHandler(
-    requestType: Type<CQRSRequest<any>>,
-    scopeOptions?: ScopeOptions
-): ClassDecorator {
+export function RequestHandler(requestType: Type<CQRSRequest<any>>, scopeOptions?: ScopeOptions): ClassDecorator {
     return (target): void => {
         if (!(target.prototype instanceof AbstractRequestHandler)) {
-            throw new Error(
-                `${target.name} is not a request handler, did you extend ${AbstractRequestHandler.name} ?`
-            );
+            throw new Error(`${target.name} is not a request handler, did you extend ${AbstractRequestHandler.name} ?`);
         }
         const requestHandlerTypes = staticRequestHandlerMap.get(requestType) || [];
         staticRequestHandlerMap.set(requestType, [

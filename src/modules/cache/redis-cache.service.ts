@@ -1,19 +1,19 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
-@Injectable({ scope: Scope.DEFAULT })
-export class RedisCachingService {
+@Injectable()
+export class RedisCacheService {
     private client: Redis;
     constructor(configService: ConfigService) {
         this.client = new Redis({
             ...configService.get('redis'),
             lazyConnect: true,
         });
-        if (!redisCachingService) redisCachingService = this;
+        if (!redisCacheService) redisCacheService = this;
     }
 
-    public async get<T>(key: string, hashKey: string): Promise<T | null> {
+    async get<T>(key: string, hashKey: string | null = null) {
         if (!hashKey) {
             const data = await this.client.get(key);
             if (data) {
@@ -29,7 +29,7 @@ export class RedisCachingService {
         return null;
     }
 
-    public async set<T>(key: string, hashKey: string, data: T): Promise<void> {
+    async set<T>(key: string, hashKey: string, data: T) {
         if (!data) return;
 
         if (!hashKey) {
@@ -39,7 +39,7 @@ export class RedisCachingService {
         }
     }
 
-    public async remove(key: string, hashKey: string) {
+    async remove(key: string, hashKey: string | null = null) {
         if (!hashKey) {
             await this.client.del(key);
         } else {
@@ -47,7 +47,7 @@ export class RedisCachingService {
         }
     }
 
-    public async removeMany(key: string | string[], hashKeys: string[]) {
+    async removeMany(key: string | string[], hashKeys: string[] | null = null) {
         if (Array.isArray(key)) {
             await this.client.del(key);
         } else if (typeof key === 'string' && Array.isArray(hashKeys) && hashKeys.length > 0) {
@@ -56,6 +56,6 @@ export class RedisCachingService {
     }
 }
 
-let redisCachingService: RedisCachingService;
+let redisCacheService: RedisCacheService;
 
-export default () => redisCachingService;
+export default () => redisCacheService;

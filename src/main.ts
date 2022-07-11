@@ -1,18 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
-import { AppModule } from './app.module';
 import * as pgk from '../package.json';
-import { GlobalExceptionsFilter } from 'filters/global-exception.filter';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalFilters(new GlobalExceptionsFilter());
-    app.useGlobalPipes(
-        new ValidationPipe({
-            transform: true,
-        })
-    );
     const config = new DocumentBuilder()
         .setTitle('Example')
         .setDescription('The core api document for example')
@@ -26,6 +18,5 @@ async function bootstrap() {
 
     await app.listen(3000);
 }
-bootstrap()
-    .then()
-    .catch((e) => console.log(e));
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+bootstrap();

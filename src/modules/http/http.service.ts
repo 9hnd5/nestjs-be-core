@@ -1,20 +1,17 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
-import { ScopeVariable } from 'modules/scope-variable/scope-variable.model';
+import { ScopeVariable } from 'models/common.model';
 import { HTTP_OPTION } from './const';
 import { HttpOption } from './type';
 
 type OverrideOption = Partial<HttpOption> | null;
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class HttpService {
     public scopeVariable!: ScopeVariable;
 
-    constructor(
-        @Inject(REQUEST) req: any,
-        @Inject(HTTP_OPTION) private registerOption: HttpOption
-    ) {
+    constructor(@Inject(REQUEST) req: any, @Inject(HTTP_OPTION) private registerOption: HttpOption) {
         this.scopeVariable = req.scopeVariable;
     }
 
@@ -60,15 +57,20 @@ export class HttpService {
                 response = await axios.get(url, config);
             }
 
-            const { data } = response;
+            const {
+                data: { data },
+            } = response;
 
-            if (data?.result !== 0) return data?.data;
-            else throw data?.errorMessage;
+            return data;
         } catch (error) {
-            throw error.toString();
+            throw error.toJSON();
         }
     }
 
+    /**
+     * This method is use to make a http post request to external api and can override the default config
+     * @param overrideOption override config for this method
+     */
     async post(body: any, overrideOption: OverrideOption = null) {
         const { url, autoInject, config } = this.getOption(overrideOption);
         try {
@@ -88,15 +90,20 @@ export class HttpService {
                 response = await axios.post(url, body, config);
             }
 
-            const { data } = response;
+            const {
+                data: { data },
+            } = response;
 
-            if (data?.result !== 0) return data?.data;
-            else throw data?.errorMessage;
+            return data;
         } catch (error) {
-            throw error.toString();
+            throw error.toJSON();
         }
     }
 
+    /**
+     * This method is use to make a http put request to external api and can override the default config
+     * @param overrideOption override config for this method
+     */
     async put(body: any, overrideOption: OverrideOption = null) {
         const { url, autoInject, config } = this.getOption(overrideOption);
         try {
@@ -116,15 +123,20 @@ export class HttpService {
                 response = await axios.put(url, body, config);
             }
 
-            const { data } = response;
+            const {
+                data: { data },
+            } = response;
 
-            if (data?.result !== 0) return data?.data;
-            else throw data?.errorMessage;
+            return data;
         } catch (error) {
-            throw error.toString();
+            throw error.toJSON();
         }
     }
 
+    /**
+     * This method is use to make a http delete request to external api and can override the default config
+     * @param overrideOption override config for this method
+     */
     async delete(overrideOption: OverrideOption = null) {
         const { url, autoInject, config } = this.getOption(overrideOption);
         try {
@@ -144,12 +156,13 @@ export class HttpService {
                 response = await axios.delete(url, config);
             }
 
-            const { data } = response;
+            const {
+                data: { data },
+            } = response;
 
-            if (data?.result !== 0) return data?.data;
-            else throw data?.errorMessage;
+            return data;
         } catch (error) {
-            throw error.toString();
+            throw error.toJSON();
         }
     }
 }

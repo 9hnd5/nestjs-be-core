@@ -1,35 +1,35 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "*": ["src/*"],
-      "~/*": ["src/*"]
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": true,
+        "removeComments": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es2017",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "baseUrl": ".",
+        "paths": {
+            "*": ["src/*"],
+            "~/*": ["src/*"]
+        },
+        "incremental": true,
+        "skipLibCheck": true,
+        "strictNullChecks": true,
+        "noImplicitAny": false,
+        "strictBindCallApply": false,
+        "forceConsistentCasingInFileNames": false,
+        "noFallthroughCasesInSwitch": false,
+        "resolveJsonModule": true,
+        "lib": ["ES2021.String"]
     },
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "resolveJsonModule": true,
-    "lib": ["ES2021.String"],
-  },
-  "include": ["src/**/*", "src/**/*.json", "config/*.json"],
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  },
-  "tsc-alias": {
-    "verbose": false,
-    "resolveFullPaths": true
-  }
+    "include": ["src/**/*", "src/**/*.json", "config/*.json"],
+    "ts-node": {
+        "require": ["tsconfig-paths/register"]
+    },
+    "tsc-alias": {
+        "verbose": false,
+        "resolveFullPaths": true
+    }
 }
