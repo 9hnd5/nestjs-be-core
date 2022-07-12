@@ -14,7 +14,7 @@ export class AuthorizeGuard implements CanActivate {
 
         const request = context.switchToHttp().getRequest();
         const { accessToken, tenantCode } = request.scopeVariable;
-        const session = await this.sessionService.getByAccessToken(accessToken, tenantCode);
+        const session = await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN');
 
         if (!session) return false;
         const { permission, featureName } = authData;
