@@ -8,7 +8,6 @@ export class AuthService {
 
     generateToken(payload: Record<string, any>) {
         const { secret, issuer, expiresIn } = this.configService.get('jwt');
-        const token = this.jwtService.signAsync(payload, { secret, issuer, expiresIn });
-        return token;
+        return this.jwtService.signAsync(payload, { secret, issuer, expiresIn });
     }
 }
