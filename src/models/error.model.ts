@@ -7,6 +7,18 @@ export class BusinessException extends ErrorResponse {
     }
 }
 
+export class NotFoundException extends ErrorResponse {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
+export class BadRequestException extends ErrorResponse {
+    constructor(message: string) {
+        super(message);
+    }
+}
+
 export class ValidationException extends ErrorResponse {
     constructor(validationError: { [key: string]: string }) {
         super(validationError);
