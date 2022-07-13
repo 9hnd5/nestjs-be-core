@@ -1,7 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 
 export interface HttpOption {
-    url: string;
-    autoInject: boolean;
+    autoInject?: boolean;
     config?: AxiosRequestConfig;
 }
