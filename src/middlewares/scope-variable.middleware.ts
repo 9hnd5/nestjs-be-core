@@ -34,6 +34,7 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
                 ...secondary,
                 database: secondary.database.replace('{0}', scopeVariable.tenantCode),
             };
+            scopeVariable.tenantId = 1;
         } else {
             const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!;
             scopeVariable.primary = {

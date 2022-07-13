@@ -17,9 +17,6 @@ export class HttpService {
 
     private getOption(overrideOption: OverrideOption) {
         const option = this.registerOption ?? ({} as HttpOption);
-        if (overrideOption?.url) {
-            option.url = overrideOption.url;
-        }
         if (overrideOption?.autoInject) {
             option.autoInject = overrideOption.autoInject;
         }
@@ -38,8 +35,8 @@ export class HttpService {
      * This method is use to make a http get request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async get(overrideOption: OverrideOption = null) {
-        const { url, autoInject, config } = this.getOption(overrideOption);
+    async get(url: string, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
@@ -56,14 +53,11 @@ export class HttpService {
             } else {
                 response = await axios.get(url, config);
             }
-
-            const {
-                data: { data },
-            } = response;
+            const { data } = response;
 
             return data;
         } catch (error) {
-            throw error.toJSON();
+            throw error;
         }
     }
 
@@ -71,8 +65,8 @@ export class HttpService {
      * This method is use to make a http post request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async post(body: any, overrideOption: OverrideOption = null) {
-        const { url, autoInject, config } = this.getOption(overrideOption);
+    async post(url: string, body: any, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
@@ -90,13 +84,11 @@ export class HttpService {
                 response = await axios.post(url, body, config);
             }
 
-            const {
-                data: { data },
-            } = response;
+            const { data } = response;
 
             return data;
         } catch (error) {
-            throw error.toJSON();
+            throw error;
         }
     }
 
@@ -104,8 +96,8 @@ export class HttpService {
      * This method is use to make a http put request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async put(body: any, overrideOption: OverrideOption = null) {
-        const { url, autoInject, config } = this.getOption(overrideOption);
+    async put(url: string, body: any, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
@@ -123,13 +115,11 @@ export class HttpService {
                 response = await axios.put(url, body, config);
             }
 
-            const {
-                data: { data },
-            } = response;
+            const { data } = response;
 
             return data;
         } catch (error) {
-            throw error.toJSON();
+            throw error;
         }
     }
 
@@ -137,8 +127,8 @@ export class HttpService {
      * This method is use to make a http delete request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async delete(overrideOption: OverrideOption = null) {
-        const { url, autoInject, config } = this.getOption(overrideOption);
+    async delete(url: string, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
@@ -156,13 +146,11 @@ export class HttpService {
                 response = await axios.delete(url, config);
             }
 
-            const {
-                data: { data },
-            } = response;
+            const { data } = response;
 
             return data;
         } catch (error) {
-            throw error.toJSON();
+            throw error;
         }
     }
 }

@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { includes } from 'lodash';
 import { AUTHORIZE_KEY, Permission } from 'modules/auth/decorators/auth.decorator';
 import { SessionService } from 'modules/session/session.service';
+import { Session } from 'models/common.model';
 
 @Injectable()
 export class AuthorizeGuard implements CanActivate {
@@ -14,7 +15,7 @@ export class AuthorizeGuard implements CanActivate {
 
         const request = context.switchToHttp().getRequest();
         const { accessToken, tenantCode } = request.scopeVariable;
-        const session = await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN');
+        const session = (await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN')) as Session;
 
         if (!session) return false;
         const { permission, featureName } = authData;
@@ -23,42 +24,42 @@ export class AuthorizeGuard implements CanActivate {
             return true;
         }
 
-        if (Array.isArray(session.Roles) && !!session.Roles.find((r) => r.name === 'Administrator')) {
+        if (Array.isArray(session.roles) && !!session.roles.find((r) => r.name === 'Administrator')) {
             return true;
         }
 
-        if (Array.isArray(session.AllPermissionFeatures) && includes(session.AllPermissionFeatures, featureName)) {
+        if (Array.isArray(session.allPermissionFeatures) && includes(session.allPermissionFeatures, featureName)) {
             return true;
         }
 
         if (
             permission === Permission.View &&
-            Array.isArray(session.ViewPermissionFeatures) &&
-            includes(session.ViewPermissionFeatures, featureName)
+            Array.isArray(session.viewPermissionFeatures) &&
+            includes(session.viewPermissionFeatures, featureName)
         ) {
             return true;
         }
 
         if (
             permission === Permission.Insert &&
-            Array.isArray(session.InsertPermissionFeatures) &&
-            includes(session.InsertPermissionFeatures, featureName)
+            Array.isArray(session.insertPermissionFeatures) &&
+            includes(session.insertPermissionFeatures, featureName)
         ) {
             return true;
         }
 
         if (
             permission === Permission.Update &&
-            Array.isArray(session.UpdatePermissionFeatures) &&
-            includes(session.UpdatePermissionFeatures, featureName)
+            Array.isArray(session.updatePermissionFeatures) &&
+            includes(session.updatePermissionFeatures, featureName)
         ) {
             return true;
         }
 
         if (
             permission === Permission.Delete &&
-            Array.isArray(session.DeletePermissionFeatures) &&
-            includes(session.DeletePermissionFeatures, featureName)
+            Array.isArray(session.deletePermissionFeatures) &&
+            includes(session.deletePermissionFeatures, featureName)
         ) {
             return true;
         }

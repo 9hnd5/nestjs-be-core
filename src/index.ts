@@ -38,3 +38,8 @@ export * from '~/modules/auth/decorators/auth.decorator';
 //Session module
 export * from '~/modules/session/session.module';
 export * from '~/modules/session/session.service';
+//File module
+export * from '~/modules/file/file.module';
+export * from '~/modules/file/file.service';
+//Decorator
+export { ScopeVariable as ScropeVar } from 'decorators/scope-variable.decorator';
