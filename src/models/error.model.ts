@@ -1,4 +1,4 @@
-import { NOT_PERMISSION_MESSAGE } from 'constants/message.constant';
+import { NOT_PERMISSION_MESSAGE } from '~/constants';
 import { ErrorResponse } from './response.model';
 
 export class BusinessException extends ErrorResponse {

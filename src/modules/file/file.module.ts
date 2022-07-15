@@ -1,8 +1,8 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
-import { FILE_OPTION } from 'modules/file/const';
-import { FileService } from 'modules/file/file.service';
-import { FileOption } from 'modules/file/type';
+import { FILE_OPTION } from '~/modules/file/const';
+import { FileService } from '~/modules/file/file.service';
+import { FileOption } from '~/modules/file/type';
 @Module({})
 export class FileModule {
     static register(option: FileOption): DynamicModule {

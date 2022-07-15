@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
-import { ExceptionsFilter } from 'filters/exception.filter';
-import { ScopeVariableMiddleWare } from 'middlewares/scope-variable.middleware';
-import { ValidationException } from 'models/error.model';
+import { ExceptionsFilter } from '~/filters/exception.filter';
+import { ScopeVariableMiddleWare } from '~/middlewares/scope-variable.middleware';
+import { ValidationException } from '~/models/error.model';
 
 const exceptionFilter = {
     provide: APP_FILTER,

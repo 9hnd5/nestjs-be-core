@@ -1,4 +1,4 @@
-import { ScopeVariable } from 'models/common.model';
+import { ScopeVariable } from '~/models/common.model';
 
 export class BaseQueries {
     private scopeVariable: ScopeVariable;

@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
-import { ScopeVariable } from 'models/common.model';
+import { ScopeVariable } from '~/models/common.model';
+import { UnauthorizedException } from '~/models/error.model';
 import { HTTP_OPTION } from './const';
 import { HttpOption } from './type';
-import { UnauthorizedException } from 'models/error.model';
 
 type OverrideOption = Partial<HttpOption> | null;
 

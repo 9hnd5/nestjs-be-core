@@ -1,5 +1,5 @@
-import { BaseModel, Session } from 'models/common.model';
-import { AbstractRequestHandler, CQRSRequest } from 'modules/cqrs/cqrs.implement';
+import { BaseModel, Session } from '~/models/common.model';
+import { AbstractRequestHandler, CQRSRequest } from '~/modules/cqrs/cqrs.implement';
 
 export class BaseCommand<T> extends CQRSRequest<T> {
     public session: Session;

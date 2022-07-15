@@ -1,6 +1,6 @@
 import { Controller, Get, Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { BaseController } from 'bases/base.controller';
+import { BaseController } from '~/bases/base.controller';
 import { HealthService } from './health.service';
 
 @Injectable()

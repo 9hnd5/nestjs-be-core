@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { MAIL_OPTION } from 'modules/mail/const';
-import { MailOption, MessageOption } from 'modules/mail/type';
 import * as nodemailer from 'nodemailer';
+import { MAIL_OPTION } from '~/modules/mail/const';
+import { MailOption, MessageOption } from '~/modules/mail/type';
 @Injectable()
 export class MailService {
     private transporter: nodemailer.Transporter;

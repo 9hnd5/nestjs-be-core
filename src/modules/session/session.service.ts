@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Session } from 'models/common.model';
-import { RedisCacheService } from 'modules/cache/redis-cache.service';
+import { Session } from '~/models/common.model';
+import { RedisCacheService } from '~/modules/cache/redis-cache.service';
 type Type = 'ACCCESS_TOKEN' | 'REFRESH_TOKEN';
 @Injectable()
 export class SessionService {

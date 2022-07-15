@@ -42,7 +42,7 @@ export * from '~/modules/session/session.service';
 export * from '~/modules/file/file.module';
 export * from '~/modules/file/file.service';
 //Decorator
-export { ScopeVariable as ScropeVar } from 'decorators/scope-variable.decorator';
+export { ScopeVariable as ScropeVar } from '~/decorators/scope-variable.decorator';
 
 //MailModule
 export * from '~/modules/mail/mail.module';
