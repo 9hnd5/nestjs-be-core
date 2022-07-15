@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsNumber } from 'class-validator';
+import { Request as R } from 'express';
 import { Column } from 'typeorm';
 
 export class BaseModel {
@@ -43,18 +44,18 @@ export class Session {
 }
 
 export class ScopeVariable {
-    accessToken: string;
-    refreshToken: string;
-    appName: string;
-    appBuildNumber: number;
-    requestId: string;
-    tenantCode: string;
-    tenantId: number;
-    primary: DatabaseOption;
-    secondary: DatabaseOption;
+    accessToken?: string;
+    refreshToken?: string;
+    appName?: string;
+    appBuildNumber?: number;
+    requestId?: string;
+    tenantCode?: string;
+    tenantId?: number;
+    primary?: DatabaseOption;
+    secondary?: DatabaseOption;
 
     // session
-    session: Session;
+    session?: Session;
 }
 
 export abstract class Paginated<T> {
@@ -96,4 +97,8 @@ export abstract class QueryModel {
     @Transform(({ value }) => +value)
     @IsNumber()
     pageSize = 10;
+}
+
+export interface Request extends R {
+    scopeVariable: ScopeVariable;
 }

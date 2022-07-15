@@ -4,6 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 import { ScopeVariable } from 'models/common.model';
 import { HTTP_OPTION } from './const';
 import { HttpOption } from './type';
+import { UnauthorizedException } from 'models/error.model';
 
 type OverrideOption = Partial<HttpOption> | null;
 
@@ -41,15 +42,19 @@ export class HttpService {
             let response = {} as AxiosResponse;
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
-                response = await axios.get(url, {
-                    ...config,
-                    headers: {
-                        requestId,
-                        tenantId,
-                        tenantCode,
-                        accessToken,
-                    },
-                });
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.get(url, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
             } else {
                 response = await axios.get(url, config);
             }
@@ -71,15 +76,19 @@ export class HttpService {
             let response = {} as AxiosResponse;
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
-                response = await axios.post(url, body, {
-                    ...config,
-                    headers: {
-                        requestId,
-                        tenantId,
-                        tenantCode,
-                        accessToken,
-                    },
-                });
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.post(url, body, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
             } else {
                 response = await axios.post(url, body, config);
             }
@@ -102,15 +111,19 @@ export class HttpService {
             let response = {} as AxiosResponse;
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
-                response = await axios.put(url, body, {
-                    ...config,
-                    headers: {
-                        requestId,
-                        tenantId,
-                        tenantCode,
-                        accessToken,
-                    },
-                });
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.put(url, body, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
             } else {
                 response = await axios.put(url, body, config);
             }
@@ -133,15 +146,19 @@ export class HttpService {
             let response = {} as AxiosResponse;
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
-                response = await axios.delete(url, {
-                    ...config,
-                    headers: {
-                        requestId,
-                        tenantId,
-                        tenantCode,
-                        accessToken,
-                    },
-                });
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.delete(url, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
             } else {
                 response = await axios.delete(url, config);
             }

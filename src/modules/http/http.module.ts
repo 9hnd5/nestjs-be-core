@@ -6,10 +6,12 @@ import { HttpOption } from './type';
 @Module({})
 export class HttpModule {
     static register(option: HttpOption | null = null): DynamicModule {
+        const isGlobal = option?.isGlobal ?? false;
         return {
             module: HttpModule,
             providers: [HttpService, { provide: HTTP_OPTION, useValue: option }],
             exports: [HttpService],
+            global: isGlobal,
         };
     }
 }
