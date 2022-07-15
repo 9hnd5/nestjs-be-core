@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import { CoreConfigModel } from 'models/common.model';
+import { CoreConfigModel } from '~/models/common.model';
 import * as config from '../config/config.json';
 
 const defaultConfig = () => {

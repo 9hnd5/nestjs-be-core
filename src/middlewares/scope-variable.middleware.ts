@@ -1,9 +1,9 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { HeaderKeys } from 'constants/const';
 import { NextFunction, Request, Response } from 'express';
-import { CommonHelper } from 'helpers/common.helper';
-import { DatabaseOption, ScopeVariable } from 'models/common.model';
+import { HeaderKeys } from '~/constants';
+import { CommonHelper } from '~/helpers/common.helper';
+import { DatabaseOption, ScopeVariable } from '~/models/common.model';
 
 @Injectable()
 export class ScopeVariableMiddleWare implements NestMiddleware {

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { ScopeVariable, Session } from 'models/common.model';
-import getInstance, { RedisCacheService as CachingService } from 'modules/cache/redis-cache.service';
+import { ScopeVariable, Session } from '~/models/common.model';
+import getInstance, { RedisCacheService as CachingService } from '~/modules/cache/redis-cache.service';
 
 @Injectable()
 export class BaseController {

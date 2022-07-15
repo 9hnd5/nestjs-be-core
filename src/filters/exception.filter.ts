@@ -6,7 +6,7 @@ import {
     UnauthorizedException,
     BadRequestException,
     NotFoundException,
-} from 'models/error.model';
+} from '~/models/error.model';
 @Catch()
 export class ExceptionsFilter implements Ex {
     private logger = new Logger('ExceptionsFilter');

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { HttpService } from 'modules/http/http.service';
+import { HttpService } from '~/modules/http/http.service';
 
 @Injectable()
 export class HealthService {

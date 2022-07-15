@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiHeader } from '@nestjs/swagger';
-import { HeaderKeys } from 'constants/const';
+import { HeaderKeys } from '~/constants';
 
 export function Headers(): ClassDecorator {
     return applyDecorators(
