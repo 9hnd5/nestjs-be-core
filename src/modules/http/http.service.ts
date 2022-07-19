@@ -137,6 +137,41 @@ export class HttpService {
     }
 
     /**
+     * This method is use to make a http patch request to external api and can override the default config
+     * @param overrideOption override config for this method
+     */
+    async patch(url: string, body: any, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
+        try {
+            let response = {} as AxiosResponse;
+            if (autoInject) {
+                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.patch(url, body, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
+            } else {
+                response = await axios.patch(url, body, config);
+            }
+
+            const { data } = response;
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
      * This method is use to make a http delete request to external api and can override the default config
      * @param overrideOption override config for this method
      */
