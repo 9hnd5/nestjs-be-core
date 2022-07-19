@@ -1,17 +1,21 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { HTTP_OPTION } from './const';
+import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, OPTIONS_TYPE } from './const';
 import { HttpService } from './http.service';
-import { HttpOption } from './type';
 
-@Module({})
-export class HttpModule {
-    static register(option: HttpOption | null = null): DynamicModule {
-        const isGlobal = option?.isGlobal ?? false;
+@Module({
+    providers: [HttpService],
+    exports: [HttpService],
+})
+export class HttpModule extends ConfigurableModuleClass {
+    static register(options: typeof OPTIONS_TYPE): DynamicModule {
         return {
-            module: HttpModule,
-            providers: [HttpService, { provide: HTTP_OPTION, useValue: option }],
-            exports: [HttpService],
-            global: isGlobal,
+            ...super.register(options),
+        };
+    }
+
+    static registerAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
+        return {
+            ...super.registerAsync(options),
         };
     }
 }

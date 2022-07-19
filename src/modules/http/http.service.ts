@@ -3,7 +3,7 @@ import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
 import { ScopeVariable } from '~/models/common.model';
 import { UnauthorizedException } from '~/models/error.model';
-import { HTTP_OPTION } from './const';
+import { MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
 
 type OverrideOption = Partial<HttpOption> | null;
@@ -12,7 +12,7 @@ type OverrideOption = Partial<HttpOption> | null;
 export class HttpService {
     public scopeVariable!: ScopeVariable;
 
-    constructor(@Inject(REQUEST) req: any, @Inject(HTTP_OPTION) private registerOption: HttpOption) {
+    constructor(@Inject(REQUEST) req: any, @Inject(MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {
         this.scopeVariable = req.scopeVariable;
     }
 
@@ -62,7 +62,19 @@ export class HttpService {
 
             return data;
         } catch (error) {
-            throw error;
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw error.response.data;
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                throw error.request;
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw error.message;
+            }
         }
     }
 
@@ -97,7 +109,19 @@ export class HttpService {
 
             return data;
         } catch (error) {
-            throw error;
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw error.response.data;
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                throw error.request;
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw error.message;
+            }
         }
     }
 
@@ -132,7 +156,66 @@ export class HttpService {
 
             return data;
         } catch (error) {
-            throw error;
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw error.response.data;
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                throw error.request;
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw error.message;
+            }
+        }
+    }
+
+    /**
+     * This method is use to make a http patch request to external api and can override the default config
+     * @param overrideOption override config for this method
+     */
+    async patch(url: string, body: any, overrideOption: OverrideOption = null) {
+        const { autoInject, config } = this.getOption(overrideOption);
+        try {
+            let response = {} as AxiosResponse;
+            if (autoInject) {
+                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                if (requestId && tenantId && tenantCode && accessToken) {
+                    response = await axios.patch(url, body, {
+                        ...config,
+                        headers: {
+                            requestId,
+                            tenantId,
+                            tenantCode,
+                            accessToken,
+                        },
+                    });
+                } else {
+                    throw new UnauthorizedException('Unauthorize');
+                }
+            } else {
+                response = await axios.patch(url, body, config);
+            }
+
+            const { data } = response;
+
+            return data;
+        } catch (error) {
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw error.response.data;
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                throw error.request;
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw error.message;
+            }
         }
     }
 
@@ -167,7 +250,19 @@ export class HttpService {
 
             return data;
         } catch (error) {
-            throw error;
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                throw error.response.data;
+            } else if (error.request) {
+                // The request was made but no response was received
+                // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                // http.ClientRequest in node.js
+                throw error.request;
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                throw error.message;
+            }
         }
     }
 }
