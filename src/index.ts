@@ -21,7 +21,6 @@ export * from '~/models/response.model';
 //caching module
 export * from '~/modules/cache/cache.module';
 export { RedisCacheService as CacheService } from '~/modules/cache/redis-cache.service';
-export * from '~/modules/common/common.module';
 //cqrs module
 export * from '~/modules/cqrs/cqrs.implement';
 export * from '~/modules/cqrs/cqrs.module';
