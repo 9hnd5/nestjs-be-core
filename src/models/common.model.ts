@@ -1,26 +1,51 @@
 import { Transform } from 'class-transformer';
 import { IsNumber } from 'class-validator';
-import { Request as R } from 'express';
 import { Column } from 'typeorm';
 
+/**
+ * @deprecated in future, please consider use Base instead
+ */
 export class BaseModel {
     @Column({ name: 'is_deleted', type: 'boolean', nullable: false })
     public isDeleted: boolean;
 
-    @Column({ name: 'created_date', type: 'datetime', nullable: false })
+    @Column({ name: 'created_date', type: 'date', nullable: false })
     public createdDate: Date;
 
     @Column({ name: 'created_by', type: 'int', nullable: false })
     public createdBy: number;
 
-    @Column({ name: 'modified_date', type: 'datetime' })
+    @Column({ name: 'modified_date', type: 'date', nullable: true })
     public modifiedDate: Date;
 
-    @Column({ name: 'modified_by', type: 'int' })
+    @Column({ name: 'modified_by', type: 'int', nullable: true })
     public modifiedBy: number;
 }
+export class Base {
+    @Column({ name: 'is_deleted', type: 'boolean', nullable: false })
+    public isDeleted: boolean;
 
+    @Column({ name: 'created_date', type: 'date', nullable: false })
+    public createdDate: Date;
+
+    @Column({ name: 'created_by', type: 'int', nullable: false })
+    public createdBy: number;
+
+    @Column({ name: 'modified_date', type: 'date', nullable: true })
+    public modifiedDate: Date;
+
+    @Column({ name: 'modified_by', type: 'int', nullable: true })
+    public modifiedBy: number;
+}
+/**
+ * @deprecated in future, please consider use TenantBase instead
+ */
 export class TenantBaseModel extends BaseModel {
+    @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
+    public companyId: number;
+}
+
+export class TenantBase extends Base {
     @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
     public companyId: number;
 }
@@ -97,8 +122,4 @@ export abstract class QueryModel {
     @Transform(({ value }) => +value)
     @IsNumber()
     pageSize = 10;
-}
-
-export interface Request extends R {
-    scopeVariable: ScopeVariable;
 }
