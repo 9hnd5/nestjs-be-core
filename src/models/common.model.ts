@@ -62,7 +62,7 @@ export class ScopeVariable {
     accessToken?: string;
     refreshToken?: string;
     appName?: string;
-    appBuildNumber?: number;
+    appBuildNumber?: number | string;
     requestId?: string;
     tenantCode?: string;
     tenantId?: number;

@@ -1,4 +1,4 @@
-import { NOT_PERMISSION_MESSAGE } from '~/constants';
+import { NOT_PERMISSION_MESSAGE } from '~/constants/message.constant';
 import { ErrorResponse } from './response.model';
 
 export class BusinessException extends ErrorResponse {
@@ -20,14 +20,8 @@ export class BadRequestException extends ErrorResponse {
 }
 
 export class ValidationException extends ErrorResponse {
-    constructor(validationError: { [key: string]: string }) {
+    constructor(validationError: { [key: string]: string }[]) {
         super(validationError);
-    }
-}
-
-export class ServerException extends ErrorResponse {
-    constructor(message: string) {
-        super(message);
     }
 }
 
