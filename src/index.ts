@@ -3,6 +3,8 @@ export * from '~/bases/base.command';
 export * from '~/bases/base.controller';
 export * from '~/bases/base.queries';
 export * from '~/bases/base.repository';
+export * from '~/bases/base-schema.base';
+export * from '~/bases/tenant-schema.base';
 //config
 export * from '~/config';
 //const
