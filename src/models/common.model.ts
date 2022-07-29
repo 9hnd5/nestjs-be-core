@@ -22,19 +22,10 @@ export class BaseModel {
     public modifiedBy: number;
 }
 export class Base {
-    @Column({ name: 'is_deleted', type: 'boolean', nullable: false })
     public isDeleted: boolean;
-
-    @Column({ name: 'created_date', type: 'date', nullable: false })
     public createdDate: Date;
-
-    @Column({ name: 'created_by', type: 'int', nullable: false })
     public createdBy: number;
-
-    @Column({ name: 'modified_date', type: 'date', nullable: true })
     public modifiedDate: Date;
-
-    @Column({ name: 'modified_by', type: 'int', nullable: true })
     public modifiedBy: number;
 }
 /**
@@ -46,7 +37,6 @@ export class TenantBaseModel extends BaseModel {
 }
 
 export class TenantBase extends Base {
-    @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
     public companyId: number;
 }
 
@@ -72,7 +62,7 @@ export class ScopeVariable {
     accessToken?: string;
     refreshToken?: string;
     appName?: string;
-    appBuildNumber?: number;
+    appBuildNumber?: number | string;
     requestId?: string;
     tenantCode?: string;
     tenantId?: number;

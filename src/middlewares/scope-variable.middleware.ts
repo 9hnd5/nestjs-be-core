@@ -1,27 +1,26 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { UUID } from 'bson';
 import { NextFunction, Request, Response } from 'express';
-import { HeaderKeys } from '~/constants';
-import { CommonHelper } from '~/helpers/common.helper';
+import { HeaderKeys } from '~/constants/const';
 import { DatabaseOption, ScopeVariable } from '~/models/common.model';
 
 @Injectable()
 export class ScopeVariableMiddleWare implements NestMiddleware {
     constructor(private configService: ConfigService) {}
 
-    use(req: Request | any, res: Response, next: NextFunction) {
+    use(req: Request, res: Response, next: NextFunction) {
         const scopeVariable: ScopeVariable = new ScopeVariable();
-
-        scopeVariable.accessToken = req.headers[HeaderKeys.AccessToken.toLowerCase()];
-        scopeVariable.refreshToken = req.headers[HeaderKeys.RefreshToken.toLowerCase()];
-        scopeVariable.appName = req.headers[HeaderKeys.AppName.toLowerCase()];
-        scopeVariable.appBuildNumber = req.headers[HeaderKeys.AppBuildNumber.toLowerCase()];
-        scopeVariable.requestId = req.headers[HeaderKeys.RequestId.toLowerCase()];
+        scopeVariable.accessToken = req.header(HeaderKeys.AccessToken.toLowerCase());
+        scopeVariable.refreshToken = req.header(HeaderKeys.RefreshToken.toLowerCase());
+        scopeVariable.appName = req.header(HeaderKeys.AppName.toLowerCase());
+        scopeVariable.appBuildNumber = req.header(HeaderKeys.AppBuildNumber.toLowerCase());
+        scopeVariable.requestId = req.header(HeaderKeys.RequestId.toLowerCase());
         if (!scopeVariable.requestId) {
-            scopeVariable.requestId = CommonHelper.uuidv4();
+            scopeVariable.requestId = new UUID().toString();
         }
-
-        scopeVariable.tenantCode = req.headers[HeaderKeys.TenantCode.toLowerCase()];
+        console.log(scopeVariable.requestId);
+        scopeVariable.tenantCode = req.header(HeaderKeys.TenantCode.toLowerCase());
         if (scopeVariable.tenantCode) {
             // todo
             const primary = this.configService.get<DatabaseOption>('primarySQLConnection')!;
@@ -48,7 +47,6 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
             };
             scopeVariable.tenantId = -1;
         }
-
         req.scopeVariable = scopeVariable;
 
         next();
