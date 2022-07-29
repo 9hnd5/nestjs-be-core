@@ -1,7 +1,7 @@
 export class CoreResponse {
     public result: number;
     public data: any;
-    public error: string | { [key: string]: string }[];
+    public error: string | Record<string, any>[];
 }
 
 export class SuccessResponse extends CoreResponse {
@@ -13,7 +13,7 @@ export class SuccessResponse extends CoreResponse {
 }
 
 export class ErrorResponse extends CoreResponse {
-    constructor(message: string | { [key: string]: string }[]) {
+    constructor(message: string | Record<string, any>[]) {
         super();
         this.result = -1;
         this.error = message;
@@ -21,7 +21,7 @@ export class ErrorResponse extends CoreResponse {
 }
 
 export class WarningResponse extends CoreResponse {
-    constructor(message: string | { [key: string]: string }[]) {
+    constructor(message: string | Record<string, any>[]) {
         super();
         this.result = -2;
         this.error = message;

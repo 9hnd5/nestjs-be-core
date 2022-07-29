@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from '~/app.controller';
+import { load } from '~/config';
 import { AuthModule } from '~/modules/auth/auth.module';
 import { InitialModule } from '~/modules/initial/initial.module';
-
-import { load } from './config';
 
 @Module({
     imports: [
