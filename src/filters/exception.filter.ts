@@ -1,50 +1,24 @@
-import {
-    ArgumentsHost,
-    BadRequestException as NestBadRequestException,
-    Catch,
-    ExceptionFilter as NestExceptionFilter,
-} from '@nestjs/common';
-import {
-    BadRequestException,
-    BusinessException,
-    NotFoundException,
-    UnauthorizedException,
-    ValidationException,
-} from '~/models/error.model';
+import { Catch, ArgumentsHost, BadRequestException } from '@nestjs/common';
+import { BaseExceptionFilter } from '@nestjs/core';
+import { ValidationException } from '~/models/error.model';
+
 @Catch()
-export class ExceptionsFilter implements NestExceptionFilter {
-    catch(exception: Error, host: ArgumentsHost) {
+export class ExceptionsFilter extends BaseExceptionFilter {
+    catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
-        let responseData: any = exception;
-        let statusCode = 0;
-
-        if (exception instanceof NestBadRequestException) {
-            const { message } = exception.getResponse() as {
-                message: string | string[];
-            };
+        if (exception instanceof BadRequestException) {
+            const { message } = exception.getResponse() as { message: string | string[] };
             if (typeof message !== 'string') {
-                const error: { [key: string]: any }[] = [];
+                const error: Record<string, any>[] = [];
                 for (const m of message) {
                     const index = m.indexOf(' ');
                     const key = m.substring(0, index);
                     error.push({ [key]: m });
                 }
-                responseData = new ValidationException(error);
-            } else {
-                responseData = new BadRequestException(message);
+                response.status(400).json(new ValidationException(error).getResponse());
             }
-            statusCode = 400;
-        } else if (exception instanceof BusinessException) {
-            statusCode = 403;
-        } else if (exception instanceof BadRequestException) {
-            statusCode = 400;
-        } else if (exception instanceof UnauthorizedException) {
-            statusCode = 401;
-        } else if (exception instanceof NotFoundException) {
-            statusCode = 404;
         }
-
-        response.status(statusCode).json(responseData);
+        super.catch(exception, host);
     }
 }

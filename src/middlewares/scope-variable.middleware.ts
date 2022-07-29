@@ -19,7 +19,6 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
         if (!scopeVariable.requestId) {
             scopeVariable.requestId = new UUID().toString();
         }
-        console.log(scopeVariable.requestId);
         scopeVariable.tenantCode = req.header(HeaderKeys.TenantCode.toLowerCase());
         if (scopeVariable.tenantCode) {
             // todo
