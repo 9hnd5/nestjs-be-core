@@ -1,6 +1,5 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
-import { error } from 'console';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DataSource } from 'typeorm';
 import { SuccessResponse } from '~/models/response.model';
@@ -15,14 +14,12 @@ export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessRes
         const observable = next.handle();
         return observable.pipe(
             tap({
-                error: () =>
-                    throwError(() => {
-                        this.dataSource
-                            .destroy()
-                            .then()
-                            .catch((e) => console.log(e));
-                        throw error;
-                    }),
+                error: () => {
+                    this.dataSource
+                        .destroy()
+                        .then()
+                        .catch((e) => console.log(e));
+                },
                 complete: () => {
                     this.dataSource
                         .destroy()
