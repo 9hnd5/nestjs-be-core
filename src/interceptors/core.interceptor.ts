@@ -1,16 +1,18 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DataSource } from 'typeorm';
+import { EXCLUDE_CORE_INTERCEPTOR_KEY } from '~/decorators/exclude-core-interceptor.decorator';
 import { SuccessResponse } from '~/models/response.model';
 
 @Injectable()
 export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessResponse> {
-    constructor(private dataSource: DataSource) {}
+    constructor(private reflector: Reflector, private dataSource: DataSource) {}
     intercept(
         context: ExecutionContext,
         next: CallHandler<T>
-    ): Observable<SuccessResponse> | Promise<Observable<SuccessResponse>> {
+    ): Observable<SuccessResponse | any> | Promise<Observable<SuccessResponse | any>> {
         const observable = next.handle();
         return observable.pipe(
             tap({
@@ -28,6 +30,8 @@ export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessRes
                 },
             }),
             map((data) => {
+                const excludeCoreInterceptor = this.reflector.get(EXCLUDE_CORE_INTERCEPTOR_KEY, context.getClass());
+                if (excludeCoreInterceptor) return data;
                 return new SuccessResponse(data);
             })
         );
