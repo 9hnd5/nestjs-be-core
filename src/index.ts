@@ -13,6 +13,8 @@ export * from '~/constants/message.constant';
 
 //interceptors
 export * from '~/interceptors/core.interceptor';
+export * from '~/interceptors/core-response.interceptor';
+export * from '~/interceptors/close-connection.interceptor';
 
 //models
 export * from '~/models/common.model';
@@ -42,7 +44,7 @@ export * from '~/modules/file/file.module';
 export * from '~/modules/file/file.service';
 //Decorator
 export { ScopeVariable as ScropeVar } from '~/decorators/scope-variable.decorator';
-export * from '~/decorators/exclude-core-interceptor.decorator';
+export * from '~/decorators/ignore-core-response.decorator';
 
 //MailModule
 export * from '~/modules/mail/mail.module';
