@@ -1,24 +1,50 @@
-import { Catch, ArgumentsHost, BadRequestException } from '@nestjs/common';
+import { ArgumentsHost, Catch, HttpException, HttpStatus } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
-import { ValidationException } from '~/models/error.model';
+import { isArray } from 'lodash';
+import { ErrorResponse } from '~/models/response.model';
 
 @Catch()
 export class ExceptionsFilter extends BaseExceptionFilter {
     catch(exception: unknown, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const response = ctx.getResponse();
-        if (exception instanceof BadRequestException) {
-            const { message } = exception.getResponse() as { message: string | string[] };
-            if (typeof message !== 'string') {
-                const error: Record<string, any>[] = [];
+        let customException = exception;
+        const httpAdapter = this.httpAdapterHost?.httpAdapter;
+
+        //Exception that belong to HttpException
+        if (exception instanceof HttpException) {
+            const status = exception.getStatus();
+            const res = exception.getResponse() as
+                | { statusCode: number; message: string | string[]; error: string }
+                | string;
+
+            if (typeof res === 'object' && isArray(res.message)) {
+                const { message } = res;
+                const customMessage: Record<string, any>[] = [];
                 for (const m of message) {
                     const index = m.indexOf(' ');
                     const key = m.substring(0, index);
-                    error.push({ [key]: m });
+                    customMessage.push({ [key]: m });
                 }
-                response.status(400).json(new ValidationException(error).getResponse());
+                customException = new HttpException(new ErrorResponse(customMessage), status);
             }
+
+            if (typeof res === 'object' && typeof res.message === 'string') {
+                const { message } = res;
+                customException = new HttpException(new ErrorResponse(message), status);
+            }
+
+            if (typeof res === 'string') {
+                customException = new HttpException(new ErrorResponse(res), status);
+            }
+
+            super.catch(customException, host);
         }
-        super.catch(exception, host);
+        //Other exception that unknow
+        else {
+            httpAdapter!.reply(
+                host.switchToHttp().getResponse(),
+                new ErrorResponse('Unknow exception'),
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
