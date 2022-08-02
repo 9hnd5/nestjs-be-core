@@ -3,6 +3,7 @@ import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
 import { Request } from 'express';
 import { ScopeVariable } from '~/models/common.model';
+import { SuccessResponse } from '~/models/response.model';
 import { MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
 
@@ -36,7 +37,10 @@ export class HttpService {
      * This method is use to make a http get request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async get(url: string, overrideOption: OverrideOption = null) {
+    async get<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption: OverrideOption = null
+    ): Promise<R> {
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -60,7 +64,7 @@ export class HttpService {
             }
             const { data } = response;
 
-            return data;
+            return data as R;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -82,7 +86,11 @@ export class HttpService {
      * This method is use to make a http post request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async post(url: string, body: any, overrideOption: OverrideOption = null) {
+    async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body: any,
+        overrideOption: OverrideOption = null
+    ) {
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -107,7 +115,7 @@ export class HttpService {
 
             const { data } = response;
 
-            return data;
+            return data as R;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -129,7 +137,11 @@ export class HttpService {
      * This method is use to make a http put request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async put(url: string, body: any, overrideOption: OverrideOption = null) {
+    async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body: any,
+        overrideOption: OverrideOption = null
+    ) {
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -154,7 +166,7 @@ export class HttpService {
 
             const { data } = response;
 
-            return data;
+            return data as R;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -176,7 +188,11 @@ export class HttpService {
      * This method is use to make a http patch request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async patch(url: string, body: any, overrideOption: OverrideOption = null) {
+    async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body: any,
+        overrideOption: OverrideOption = null
+    ) {
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -201,7 +217,7 @@ export class HttpService {
 
             const { data } = response;
 
-            return data;
+            return data as R;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -223,7 +239,10 @@ export class HttpService {
      * This method is use to make a http delete request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async delete(url: string, overrideOption: OverrideOption = null) {
+    async delete<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption: OverrideOption = null
+    ) {
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -248,7 +267,7 @@ export class HttpService {
 
             const { data } = response;
 
-            return data;
+            return data as R;
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
