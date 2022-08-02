@@ -30,5 +30,6 @@
     "tsc-alias": {
         "verbose": false,
         "resolveFullPaths": true
-    }
+    },
+    "files": ["src/index.d.ts"]
 }
