@@ -6,6 +6,7 @@ class DTO {
     @IsNotEmpty()
     name: string;
 }
+
 @Controller()
 @IgnoreCoreRes()
 export class AppController {

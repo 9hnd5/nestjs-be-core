@@ -1,28 +1,40 @@
-export class CoreResponse {
+/**
+ * @deprecated
+ */
+export class CoreResponse<T = any> {
     public result: number;
-    public data: any;
+    public data: T;
     public error: any;
 }
 
-export class SuccessResponse extends CoreResponse {
-    constructor(data: any) {
-        super();
+export interface CoreRes<T = any> {
+    result: number;
+    data: T;
+    error: any;
+}
+
+export class SuccessResponse<T = any> implements Omit<CoreRes<T>, 'error'> {
+    result: number;
+    data: T;
+    constructor(data: T) {
         this.result = 0;
         this.data = data;
     }
 }
 
-export class ErrorResponse extends CoreResponse {
-    constructor(error: any) {
-        super();
+export class ErrorResponse<T = any> implements Omit<CoreRes<T>, 'data'> {
+    error: T;
+    result: number;
+    constructor(error: T) {
         this.result = -1;
         this.error = error;
     }
 }
 
-export class WarningResponse extends CoreResponse {
-    constructor(error: any) {
-        super();
+export class WarningResponse<T = any> implements Omit<CoreRes<T>, 'data'> {
+    error: T;
+    result: number;
+    constructor(error: T) {
         this.result = -2;
         this.error = error;
     }
