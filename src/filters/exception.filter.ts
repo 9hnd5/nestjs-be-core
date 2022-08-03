@@ -42,7 +42,7 @@ export class ExceptionsFilter extends BaseExceptionFilter {
         else {
             httpAdapter!.reply(
                 host.switchToHttp().getResponse(),
-                new ErrorResponse('Unknow exception'),
+                new ErrorResponse(exception),
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
