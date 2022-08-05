@@ -28,7 +28,7 @@ export class BadRequestException extends HttpException {
  */
 export class ValidationException extends HttpException {
     constructor(error: { [key: string]: string }[]) {
-        super(new ErrorResponse(error), HttpStatus.BAD_REQUEST);
+        super(new ErrorResponse('Validation Exception', error), HttpStatus.BAD_REQUEST);
     }
 }
 /**
