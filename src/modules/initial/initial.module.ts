@@ -30,6 +30,6 @@ const validationPipe = {
 })
 export class InitialModule {
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(ScopeVariableMiddleWare, TryConnecDBMiddleware).forRoutes('*');
+        consumer.apply(ScopeVariableMiddleWare).forRoutes('*');
     }
 }

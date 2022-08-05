@@ -24,7 +24,7 @@ export class ExceptionsFilter extends BaseExceptionFilter {
                     const key = m.substring(0, index);
                     customMessage.push({ [key]: m });
                 }
-                customException = new HttpException(new ErrorResponse(customMessage), status);
+                customException = new HttpException(new ErrorResponse('Validation Exception', customMessage), status);
             }
 
             if (typeof res === 'object' && typeof res.message === 'string') {
@@ -42,7 +42,7 @@ export class ExceptionsFilter extends BaseExceptionFilter {
         else {
             httpAdapter!.reply(
                 host.switchToHttp().getResponse(),
-                new ErrorResponse(exception),
+                new ErrorResponse('Internal Exception', exception),
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
