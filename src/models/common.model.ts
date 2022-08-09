@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import { IsNumber } from 'class-validator';
 import { Column } from 'typeorm';
 
@@ -105,10 +105,30 @@ export class CoreConfigModel {
     };
 }
 
+/**
+ * @deprecated in future, please consider use QueryBase instead
+ */
+@Exclude()
 export abstract class QueryModel {
+    @Expose()
     @Transform(({ value }) => +value)
     @IsNumber()
     pageIndex = 1;
+
+    @Expose()
+    @Transform(({ value }) => +value)
+    @IsNumber()
+    pageSize = 10;
+}
+
+@Exclude()
+export abstract class QueryBase {
+    @Expose()
+    @Transform(({ value }) => +value)
+    @IsNumber()
+    pageIndex = 1;
+
+    @Expose()
     @Transform(({ value }) => +value)
     @IsNumber()
     pageSize = 10;
