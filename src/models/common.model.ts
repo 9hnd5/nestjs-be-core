@@ -111,25 +111,24 @@ export class CoreConfigModel {
 @Exclude()
 export abstract class QueryModel {
     @Expose()
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => (value ? +value : 1))
     @IsNumber()
-    pageIndex = 1;
+    pageIndex: number;
 
     @Expose()
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => (value ? +value : 10))
     @IsNumber()
-    pageSize = 10;
+    pageSize: number;
 }
 
-@Exclude()
 export abstract class QueryBase {
     @Expose()
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => (value ? +value : 1))
     @IsNumber()
-    pageIndex = 1;
+    pageIndex: number;
 
     @Expose()
-    @Transform(({ value }) => +value)
+    @Transform(({ value }) => (value ? +value : 10))
     @IsNumber()
-    pageSize = 10;
+    pageSize: number;
 }
