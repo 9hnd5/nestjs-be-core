@@ -1,5 +1,5 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { IsNumber } from 'class-validator';
+import { Expose, Transform } from 'class-transformer';
+import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { Column } from 'typeorm';
 
 /**
@@ -22,11 +22,11 @@ export class BaseModel {
     public modifiedBy: number;
 }
 export class Base {
-    public isDeleted: boolean;
-    public createdDate: Date;
-    public createdBy: number;
-    public modifiedDate: Date;
-    public modifiedBy: number;
+    isDeleted: boolean;
+    createdDate: Date;
+    createdBy: number;
+    modifiedDate?: Date;
+    modifiedBy?: number;
 }
 /**
  * @deprecated in future, please consider use TenantBase instead
@@ -108,16 +108,19 @@ export class CoreConfigModel {
 /**
  * @deprecated in future, please consider use QueryBase instead
  */
-@Exclude()
 export abstract class QueryModel {
     @Expose()
     @Transform(({ value }) => (value ? +value : 1))
     @IsNumber()
+    @Min(1)
+    @IsOptional()
     pageIndex: number;
 
     @Expose()
     @Transform(({ value }) => (value ? +value : 10))
     @IsNumber()
+    @Max(100)
+    @IsOptional()
     pageSize: number;
 }
 
@@ -125,10 +128,14 @@ export abstract class QueryBase {
     @Expose()
     @Transform(({ value }) => (value ? +value : 1))
     @IsNumber()
+    @Min(1)
+    @IsOptional()
     pageIndex: number;
 
     @Expose()
     @Transform(({ value }) => (value ? +value : 10))
     @IsNumber()
+    @Max(100)
+    @IsOptional()
     pageSize: number;
 }

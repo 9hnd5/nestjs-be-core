@@ -1,11 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { IsNotEmpty } from 'class-validator';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { IgnoreCoreRes } from '~/decorators/ignore-core-response.decorator';
+import { QueryBase } from '~/models/common.model';
 
-class DTO {
-    @IsNotEmpty()
-    name: string;
-}
+class DTO extends QueryBase {}
 
 @Controller()
 @IgnoreCoreRes()
@@ -13,8 +10,8 @@ export class AppController {
     constructor() {}
 
     @Get()
-    get() {
-        return { name: 'huy', age: 27 };
+    get(@Query() query: DTO) {
+        return query;
     }
 
     @Post()
