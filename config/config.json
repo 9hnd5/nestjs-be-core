@@ -1,9 +1,9 @@
 {
     "primarySQLConnection": {
-        "host": "localhost",
-        "port": 3307,
-        "username": "root",
-        "password": "Abcd1234",
+        "host": "172.16.0.110",
+        "port": 6003,
+        "username": "dev",
+        "password": "comatic_dev@2022",
         "database": "test_{0}"
     },
     "secondarySQLConnection": {
@@ -12,5 +12,12 @@
         "username": "root",
         "password": "Abcd1234",
         "database": "test_{0}"
+    },
+    "tenantSQLConnection": {
+        "host": "172.200.0.200",
+        "port": 4012,
+        "username": "root",
+        "password": "Juve@12345",
+        "database": "saaspiens_company"
     }
 }

@@ -6,7 +6,7 @@ export const BaseSchema = {
         nullable: false,
     } as EntitySchemaColumnOptions,
     createdDate: {
-        type: 'date',
+        type: Date,
         name: 'created_date',
         nullable: false,
     } as EntitySchemaColumnOptions,
@@ -16,7 +16,7 @@ export const BaseSchema = {
         nullable: false,
     } as EntitySchemaColumnOptions,
     modifiedDate: {
-        type: 'date',
+        type: Date,
         name: 'modified_date',
         nullable: true,
     } as EntitySchemaColumnOptions,
