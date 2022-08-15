@@ -46,7 +46,7 @@ export class TenantModel {
 }
 
 export class Session {
-    public userId: number;
+    public userId: number | string;
     public roles: {
         id: number;
         name: string;
