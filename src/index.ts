@@ -36,6 +36,8 @@ export * from '~/modules/initial/initial.module';
 export * from '~/modules/auth/auth.module';
 export * from '~/modules/auth/auth.service';
 export * from '~/modules/auth/decorators/auth.decorator';
+export * from '~/modules/auth/decorators/local.decorator';
+export * from '~/modules/auth/enums/permission.enum';
 //Session module
 export * from '~/modules/session/session.module';
 export * from '~/modules/session/session.service';
