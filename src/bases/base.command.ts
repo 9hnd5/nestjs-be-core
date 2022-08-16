@@ -1,4 +1,5 @@
 import { Base, Session } from '~/models/common.model';
+import { sessionSubject } from '~/modules/auth/guards/local-authorize.guard';
 import { AbstractRequestHandler, CQRSRequest } from '~/modules/cqrs/cqrs.implement';
 
 export class BaseCommand<T> extends CQRSRequest<T> {
@@ -7,6 +8,9 @@ export class BaseCommand<T> extends CQRSRequest<T> {
 
 export abstract class BaseCommandHandler<T extends BaseCommand<R>, R> extends AbstractRequestHandler<T, R> {
     public async handle(command: T): Promise<R> {
+        sessionSubject.subscribe((x) => {
+            command.session = x;
+        });
         return this.apply(command);
     }
 

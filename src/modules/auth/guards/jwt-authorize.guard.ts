@@ -2,7 +2,8 @@ import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { includes } from 'lodash';
 import { Session } from '~/models/common.model';
-import { AUTHORIZE_KEY, Permission } from '~/modules/auth/decorators/auth.decorator';
+import { AUTHORIZE_KEY } from '~/modules/auth/decorators/auth.decorator';
+import { Permission } from '~/modules/auth/enums/permission.enum';
 import { SessionService } from '~/modules/session/session.service';
 
 @Injectable()
