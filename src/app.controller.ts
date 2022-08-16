@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { IgnoreCoreRes } from '~/decorators/ignore-core-response.decorator';
 import { QueryBase } from '~/models/common.model';
+import { BusinessException } from '~/models/error.model';
 
 class DTO extends QueryBase {}
 
@@ -11,6 +12,7 @@ export class AppController {
 
     @Get()
     get(@Query() query: DTO) {
+        throw new BusinessException('test');
         return query;
     }
 
