@@ -5,8 +5,8 @@
             "type": "node",
             "request": "launch",
             "name": "My application Name",
-            "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
-            "args": ["${workspaceFolder}/src/main.ts"],
+            // "runtimeArgs": ["--nolazy", "-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+            "args": ["${workspaceFolder}/dist/src/main.js"],
             "autoAttachChildProcesses": true
         }
     ]

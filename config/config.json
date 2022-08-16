@@ -1,11 +1,12 @@
 {
     "primarySQLConnection": {
-        "host": "172.16.0.110",
-        "port": 6003,
-        "username": "dev",
-        "password": "comatic_dev@2022",
+        "host": "localhost",
+        "port": 3306,
+        "username": "root",
+        "password": "",
         "database": "test_{0}"
     },
+    
     "secondarySQLConnection": {
         "host": "localhost",
         "port": 3307,
@@ -18,6 +19,6 @@
         "port": 4012,
         "username": "root",
         "password": "Juve@12345",
-        "database": "saaspiens_company"
+        "database": "dms_ai_production"
     }
 }

@@ -3,7 +3,7 @@ import AddMigration from '~/modules/migration/dtos/add-migration.dto';
 import { MigrationService } from '~/modules/migration/migration.service';
 
 @Controller('/migrations')
-export default class MigrationController {
+export class MigrationController {
     constructor(private service: MigrationService) {}
 
     @Post()

@@ -50,6 +50,11 @@ export * from '~/decorators/ignore-core-response.decorator';
 export * from '~/modules/mail/mail.module';
 export * from '~/modules/mail/mail.service';
 
+export * from './script';
+export * from '~/modules/migration/migration.module';
+export * from '~/modules/migration/migration.service';
+export * from '~/modules/migration/migration.controller';
+
 export type Immutable<T> = {
     +readonly [K in keyof T]: T[K];
 };
