@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UUID } from 'bson';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { HeaderKeys } from '~/constants/const';
 import { DatabaseOption, ScopeVariable } from '~/models/common.model';
 
@@ -9,7 +9,7 @@ import { DatabaseOption, ScopeVariable } from '~/models/common.model';
 export class ScopeVariableMiddleWare implements NestMiddleware {
     constructor(private configService: ConfigService) {}
 
-    use(req: Request, res: Response, next: NextFunction) {
+    use(req: any, res: Response, next: NextFunction) {
         const scopeVariable: ScopeVariable = new ScopeVariable();
         scopeVariable.accessToken = req.header(HeaderKeys.AccessToken.toLowerCase());
         scopeVariable.refreshToken = req.header(HeaderKeys.RefreshToken.toLowerCase());

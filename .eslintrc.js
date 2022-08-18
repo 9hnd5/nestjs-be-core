@@ -25,7 +25,7 @@ module.exports = {
         node: true,
         jest: true,
     },
-    ignorePatterns: ['.eslintrc.js', 'prettier.config.js', 'dist'],
+    ignorePatterns: ['.eslintrc.js', 'prettier.config.js', 'dist', "webpack.config.js", "webpack.plugin.js"],
     rules: {
         'import/no-named-as-default-member': 'off',
         'import/no-named-as-default': 'off',

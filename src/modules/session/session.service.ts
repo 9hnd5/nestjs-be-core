@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Session } from '~/models/common.model';
 import { RedisCacheService } from '~/modules/cache/redis-cache.service';
-type Type = 'ACCCESS_TOKEN' | 'REFRESH_TOKEN';
+type TokenType = 'ACCCESS_TOKEN' | 'REFRESH_TOKEN';
 @Injectable()
 export class SessionService {
     constructor(private cacheService: RedisCacheService) {}
 
-    get(token: string, tenantCode: string, type: Type) {
+    get(token: string, tenantCode: string, type: TokenType) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${token}` : token;
         if (type === 'ACCCESS_TOKEN') {
             key = `A:${key}`;
@@ -17,7 +17,7 @@ export class SessionService {
         return this.cacheService.get(key);
     }
 
-    set(token: string, tenantCode: string, session: Session, type: Type) {
+    set(token: string, tenantCode: string, session: Session, type: TokenType) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${token}` : token;
         if (type === 'ACCCESS_TOKEN') {
             key = `A:${key}`;
@@ -28,7 +28,7 @@ export class SessionService {
         return this.cacheService.set(key, '', session);
     }
 
-    remove(token: string, tenantCode: string, type: Type) {
+    remove(token: string, tenantCode: string, type: TokenType) {
         let key = tenantCode ? `${tenantCode.toLowerCase()}:${token}` : token;
         if (type === 'ACCCESS_TOKEN') {
             key = `A:${key}`;
