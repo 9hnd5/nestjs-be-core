@@ -3,6 +3,9 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { AUTHORIZE_KEY } from '~/modules/auth/decorators/auth.decorator';
 
+/**
+ * @deprecated
+ */
 @Injectable()
 export class JwtAuthenticateGuard extends AuthGuard('jwt') {
     constructor(private ref: Reflector) {

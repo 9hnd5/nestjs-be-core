@@ -3,7 +3,7 @@ import { Injectable, ScopeOptions, Type } from '@nestjs/common';
 export abstract class CQRSRequest<T> {}
 
 export abstract class AbstractRequestHandler<TRequest extends CQRSRequest<T>, T> {
-    public abstract handle(request: TRequest): T | Promise<T>;
+    public abstract handle(request: TRequest, req: any): T | Promise<T>;
 }
 
 const staticRequestHandlerMap: Map<

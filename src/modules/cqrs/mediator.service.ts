@@ -29,6 +29,6 @@ export class Mediator {
                 `Multiple request handlers registered for ${requestType.name}. Only one request handler can be registered per request.`
             );
         }
-        return (resolvedRequestHandlers[0].handle as any)(request);
+        return (resolvedRequestHandlers[0].handle as any)(request, this.httpRequest);
     }
 }
