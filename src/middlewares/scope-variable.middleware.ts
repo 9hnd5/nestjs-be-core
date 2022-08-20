@@ -1,13 +1,14 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 import { UUID } from 'bson';
 import { NextFunction, Response } from 'express';
 import { HeaderKeys } from '~/constants/const';
 import { DatabaseOption, ScopeVariable } from '~/models/common.model';
-
+export let cxtId: any;
 @Injectable()
 export class ScopeVariableMiddleWare implements NestMiddleware {
-    constructor(private configService: ConfigService) {}
+    constructor(private configService: ConfigService, private moduleRef: ModuleRef) {}
 
     use(req: any, res: Response, next: NextFunction) {
         const scopeVariable: ScopeVariable = new ScopeVariable();
@@ -47,7 +48,8 @@ export class ScopeVariableMiddleWare implements NestMiddleware {
             scopeVariable.tenantId = -1;
         }
         req.scopeVariable = scopeVariable;
-
+        cxtId = ContextIdFactory.getByRequest(req);
+        this.moduleRef.registerRequestByContextId(req, cxtId);
         next();
     }
 }

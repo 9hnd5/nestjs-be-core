@@ -22,7 +22,7 @@ export class LocalAuthorizeGuard implements CanActivate {
         const { accessToken, tenantCode } = request.scopeVariable;
         const session = (await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN')) as Session;
         if (!session) return false;
-        this.request.session = session;
+        this.request.scopeVariable.session = session;
 
         const { permission, featureName } = localAuthData;
 

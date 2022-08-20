@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { Mediator } from './mediator.service';
+import { CqrsModule } from '@nestjs/cqrs';
+import { Mediator } from './command';
+import { Mediator as Mediator1 } from './mediator.service';
 
 @Module({
-    providers: [Mediator],
-    exports: [Mediator],
+    imports: [CqrsModule],
+    providers: [Mediator1, Mediator],
+    exports: [Mediator1, Mediator],
 })
 export class CQRSModule {}
