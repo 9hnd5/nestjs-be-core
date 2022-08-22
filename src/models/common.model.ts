@@ -71,6 +71,7 @@ export class ScopeVariable {
 
     // session
     session?: Session;
+    [key: string]: unknown;
 }
 
 export abstract class Paginated<T> {

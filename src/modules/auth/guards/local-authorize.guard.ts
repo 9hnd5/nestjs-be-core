@@ -5,14 +5,11 @@ import { Session } from '~/models/common.model';
 import { LOCAL_AUTHORIZE_KEY } from '~/modules/auth/decorators/local.decorator';
 import { Permission } from '~/modules/auth/enums/permission.enum';
 import { SessionService } from '~/modules/session/session.service';
+import { storage } from '~/storage';
 
 @Injectable()
 export class LocalAuthorizeGuard implements CanActivate {
-    constructor(
-        private ref: Reflector,
-        private sessionService: SessionService,
-        @Inject(REQUEST) private request: any
-    ) {}
+    constructor(private ref: Reflector, private sessionService: SessionService) {}
 
     async canActivate(context: ExecutionContext) {
         const localAuthData = this.ref.get(LOCAL_AUTHORIZE_KEY, context.getHandler());
@@ -22,7 +19,8 @@ export class LocalAuthorizeGuard implements CanActivate {
         const { accessToken, tenantCode } = request.scopeVariable;
         const session = (await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN')) as Session;
         if (!session) return false;
-        this.request.scopeVariable.session = session;
+        const store = storage.getStore()!;
+        store.request.scopeVariable.session = session;
 
         const { permission, featureName } = localAuthData;
 
