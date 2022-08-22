@@ -6,6 +6,9 @@ import { AUTHORIZE_KEY } from '~/modules/auth/decorators/auth.decorator';
 import { Permission } from '~/modules/auth/enums/permission.enum';
 import { SessionService } from '~/modules/session/session.service';
 
+/**
+ * @deprecated
+ */
 @Injectable()
 export class AuthorizeGuard implements CanActivate {
     constructor(private ref: Reflector, private sessionService: SessionService) {}

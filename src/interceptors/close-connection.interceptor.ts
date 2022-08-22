@@ -1,9 +1,9 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { DataSource } from 'typeorm';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class CloseConnectionInterceptor implements NestInterceptor {
     constructor(private dataSource: DataSource) {}
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {

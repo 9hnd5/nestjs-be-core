@@ -1,6 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { FILE_OPTION } from '~/modules/file/const';
+import { FileController } from '~/modules/file/file.controller';
 import { FileService } from '~/modules/file/file.service';
 import { FileOption } from '~/modules/file/type';
 @Module({})
@@ -18,6 +19,7 @@ export class FileModule {
                 },
             ],
             exports: [FileService],
+            controllers: [FileController],
             global: isGlobal,
         };
     }

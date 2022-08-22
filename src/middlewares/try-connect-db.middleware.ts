@@ -1,9 +1,8 @@
 import { NestMiddleware } from '@nestjs/common';
-import { Request } from 'express';
 import { DataSource } from 'typeorm';
 
 export class TryConnecDBMiddleware implements NestMiddleware {
-    async use(req: Request, res: any, next: (error?: any) => void) {
+    async use(req: any, res: any, next: (error?: any) => void) {
         const { scopeVariable } = req;
         const datasource = new DataSource({
             type: 'mysql',

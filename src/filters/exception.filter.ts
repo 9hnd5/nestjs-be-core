@@ -42,7 +42,10 @@ export class ExceptionsFilter extends BaseExceptionFilter {
         else {
             httpAdapter!.reply(
                 host.switchToHttp().getResponse(),
-                new ErrorResponse('Internal Exception', exception),
+                new ErrorResponse(
+                    'Internal Exception',
+                    JSON.parse(JSON.stringify(exception, Object.getOwnPropertyNames(exception)))
+                ),
                 HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

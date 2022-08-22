@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from '~/modules/auth/strategies/local-strategy';
@@ -26,6 +26,7 @@ import { PassportModule } from '@nestjs/passport';
         {
             provide: APP_GUARD,
             useClass: AuthorizeGuard,
+            scope: Scope.REQUEST,
         },
         {
             provide: APP_GUARD,
@@ -34,6 +35,7 @@ import { PassportModule } from '@nestjs/passport';
         {
             provide: APP_GUARD,
             useClass: LocalAuthorizeGuard,
+            scope: Scope.REQUEST,
         },
     ],
     exports: [AuthService],

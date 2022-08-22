@@ -1,10 +1,9 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
-import { Request } from 'express';
 import { ScopeVariable } from '~/models/common.model';
 import { SuccessResponse } from '~/models/response.model';
-import { MODULE_OPTIONS_TOKEN } from './const';
+import { HTTP_MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
 
 type OverrideOption = Partial<HttpOption> | null;
@@ -13,7 +12,7 @@ type OverrideOption = Partial<HttpOption> | null;
 export class HttpService {
     public scopeVariable!: ScopeVariable;
 
-    constructor(@Inject(REQUEST) req: Request, @Inject(MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {
+    constructor(@Inject(REQUEST) req: any, @Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {
         this.scopeVariable = req.scopeVariable;
     }
 

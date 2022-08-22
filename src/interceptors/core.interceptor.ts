@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor, Scope } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { SuccessResponse } from '~/models/response.model';
 /**
  * @deprecated consider using CoreResInterceptor import from be-core instead
  */
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class CoreResponseInterceptor<T> implements NestInterceptor<T, SuccessResponse> {
     constructor(private reflector: Reflector, private dataSource: DataSource) {}
     intercept(

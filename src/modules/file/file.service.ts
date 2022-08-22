@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { GridFSBucket, MongoClient, ObjectId } from 'mongodb';
 import * as stream from 'stream';
+import { FILE_OPTION } from '~/modules/file/const';
 @Injectable()
 export class FileService {
     private gfs: GridFSBucket;
-    constructor(@Inject('FILE_OPTION') private url: string) {
+    constructor(@Inject(FILE_OPTION) private url: string) {
         const client = new MongoClient(this.url);
         this.gfs = new GridFSBucket(client.db());
     }

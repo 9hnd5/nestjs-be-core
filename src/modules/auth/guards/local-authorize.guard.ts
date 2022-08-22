@@ -1,13 +1,11 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import { Reflector, REQUEST } from '@nestjs/core';
 import { includes } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
 import { Session } from '~/models/common.model';
 import { LOCAL_AUTHORIZE_KEY } from '~/modules/auth/decorators/local.decorator';
 import { Permission } from '~/modules/auth/enums/permission.enum';
 import { SessionService } from '~/modules/session/session.service';
-
-export const sessionSubject = new BehaviorSubject<Session>({} as Session);
+import { storage } from '~/storage';
 
 @Injectable()
 export class LocalAuthorizeGuard implements CanActivate {
@@ -20,8 +18,10 @@ export class LocalAuthorizeGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const { accessToken, tenantCode } = request.scopeVariable;
         const session = (await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN')) as Session;
-        sessionSubject.next(session);
         if (!session) return false;
+        const store = storage.getStore()!;
+        store.request.scopeVariable.session = session;
+
         const { permission, featureName } = localAuthData;
 
         if (permission === Permission.All) {

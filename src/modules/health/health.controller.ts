@@ -4,13 +4,18 @@ import { BaseController } from '~/bases/base.controller';
 import { HealthService } from './health.service';
 
 @Injectable()
-@Controller('health')
+@Controller()
 export class HealthController extends BaseController {
     constructor(@Inject(REQUEST) request: any, private healthService: HealthService) {
         super(request);
     }
-    @Get()
+    @Get('health')
     get() {
+        return this.healthService.get();
+    }
+
+    @Get('internal/health')
+    getInternal() {
         return this.healthService.get();
     }
 }

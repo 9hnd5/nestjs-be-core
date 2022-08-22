@@ -25,7 +25,6 @@ const servicePool = mysql.createPool({
 });
 
 export const migration = async (tenantCode: string, entities: string, dirname: string = __dirname) => {
-    console.log('__dirname', dirname);
     const conn = await servicePool.getConnection();
     const [response] = await conn.execute(`SHOW DATABASES LIKE 'comatic_${tenantCode}'`);
     if (isEmpty(response)) {

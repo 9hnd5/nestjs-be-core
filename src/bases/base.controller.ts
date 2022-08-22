@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
 import { ScopeVariable, Session } from '~/models/common.model';
 import getInstance, { RedisCacheService as CachingService } from '~/modules/cache/redis-cache.service';
 
@@ -8,7 +7,7 @@ import getInstance, { RedisCacheService as CachingService } from '~/modules/cach
 export class BaseController {
     public readonly scopeVariable: ScopeVariable;
     private cachingService: CachingService = getInstance();
-    constructor(@Inject(REQUEST) protected req: Request) {
+    constructor(@Inject(REQUEST) protected req: any) {
         this.scopeVariable = req.scopeVariable;
     }
 

@@ -35,7 +35,8 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
+main.ts
+src/app.*
 src/config/local*
 src/migrations/env/*
 !src/migrations/env/local.json
