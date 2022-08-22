@@ -52,6 +52,10 @@ export * from '~/modules/session/session.module';
 export * from '~/modules/session/session.service';
 export * from './script';
 
+//Health module
+export * from '~/modules/health/health.module';
+export * from '~/modules/health/health.service';
+
 export { Context, storage } from '~/storage';
 
 export type Immutable<T> = {
