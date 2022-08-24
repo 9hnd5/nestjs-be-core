@@ -1,8 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
-import { ScopeVariable } from '~/models/common.model';
 import { SuccessResponse } from '~/models/response.model';
+import { storage } from '~/storage';
 import { HTTP_MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
 
@@ -10,11 +9,7 @@ type OverrideOption = Partial<HttpOption> | null;
 
 @Injectable()
 export class HttpService {
-    public scopeVariable!: ScopeVariable;
-
-    constructor(@Inject(REQUEST) req: any, @Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {
-        this.scopeVariable = req.scopeVariable;
-    }
+    constructor(@Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {}
 
     private getOption(overrideOption: OverrideOption) {
         const option = this.registerOption ?? ({} as HttpOption);
@@ -40,11 +35,14 @@ export class HttpService {
         url: string,
         overrideOption: OverrideOption = null
     ): Promise<R> {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
                     response = await axios.get(url, {
                         ...config,
@@ -90,11 +88,14 @@ export class HttpService {
         body: any,
         overrideOption: OverrideOption = null
     ) {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
                     response = await axios.post(url, body, {
                         ...config,
@@ -141,11 +142,14 @@ export class HttpService {
         body: any,
         overrideOption: OverrideOption = null
     ) {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
                     response = await axios.put(url, body, {
                         ...config,
@@ -192,11 +196,14 @@ export class HttpService {
         body: any,
         overrideOption: OverrideOption = null
     ) {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
                     response = await axios.patch(url, body, {
                         ...config,
@@ -242,11 +249,14 @@ export class HttpService {
         url: string,
         overrideOption: OverrideOption = null
     ) {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
                     response = await axios.delete(url, {
                         ...config,
