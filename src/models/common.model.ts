@@ -1,6 +1,7 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
+import { merge } from 'lodash';
 import { storage } from '~/storage';
 /**
  * @deprecated in future, please consider use Base instead
@@ -96,7 +97,7 @@ export abstract class AggregateRoot<T extends { id: number }> {
     }
 
     constructor(entity: Partial<T>) {
-        Object.assign(this.entity, entity);
+        this.entity = merge(this.entity, entity);
     }
 
     toEntity() {
