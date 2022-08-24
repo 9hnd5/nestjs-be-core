@@ -4,17 +4,17 @@
 export class CoreResponse<T = any> {
     public result: number;
     public data: T;
-    public error: any;
+    public errors: any;
 }
 
 export interface CoreRes<T = any> {
     result: number;
     data: T;
-    error?: any;
+    errors?: any;
     errorMessage: string;
 }
 
-export class SuccessResponse<T = any> implements Omit<CoreRes<T>, 'error' | 'errorMessage'> {
+export class SuccessResponse<T = any> implements Omit<CoreRes<T>, 'errors' | 'errorMessage'> {
     result: number;
     data: T;
     constructor(data: T) {
@@ -25,22 +25,22 @@ export class SuccessResponse<T = any> implements Omit<CoreRes<T>, 'error' | 'err
 
 export class ErrorResponse<T = any> implements Omit<CoreRes<T>, 'data'> {
     errorMessage: string;
-    error?: any;
+    errors?: any;
     result: number;
-    constructor(errorMessage: string, error?: any) {
+    constructor(errorMessage: string, errors?: any) {
         this.result = -1;
-        this.error = error;
+        this.errors = errors;
         this.errorMessage = errorMessage;
     }
 }
 
 export class WarningResponse<T = any> implements Omit<CoreRes<T>, 'data'> {
     errorMessage: string;
-    error: any;
+    errors: any;
     result: number;
-    constructor(error: any) {
+    constructor(errors: any) {
         this.result = -2;
-        this.error = error;
+        this.errors = errors;
         this.errorMessage;
     }
 }
