@@ -1,7 +1,7 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
-import { Column } from 'typeorm';
-
+import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
+import { storage } from '~/storage';
 /**
  * @deprecated in future, please consider use Base instead
  */
@@ -38,6 +38,70 @@ export class TenantBaseModel extends BaseModel {
 
 export class TenantBase extends Base {
     public companyId: number;
+}
+
+export abstract class AuditEntity {
+    @Column({ name: 'is_deleted', type: Boolean, default: false })
+    isDeleted: boolean;
+    @Column({ name: 'created_date', type: Date })
+    createdDate: Date;
+    @Column({ name: 'created_by', type: Number })
+    createdBy: number;
+    @Column({ name: 'modified_date', type: Date, nullable: true })
+    modifiedDate?: Date;
+    @Column({ name: 'modified_by', type: Number, nullable: true })
+    modifiedBy?: number;
+
+    @BeforeUpdate()
+    protected beforeUpdate() {
+        const {
+            request: {
+                scopeVariable: { session },
+            },
+        } = storage.getStore()!;
+        this.modifiedDate = new Date();
+        if (typeof session?.userId === 'number') this.modifiedBy = session.userId;
+        else this.modifiedBy = 0;
+    }
+
+    @BeforeInsert()
+    protected beforeInsert() {
+        const {
+            request: {
+                scopeVariable: { session },
+            },
+        } = storage.getStore()!;
+        this.createdDate = new Date();
+        if (typeof session?.userId === 'number') this.createdBy = session.userId;
+        else this.createdBy = 0;
+    }
+}
+
+export abstract class TenantEntity extends AuditEntity {
+    @Column({ name: 'company_id', type: Number })
+    companyId: number;
+}
+
+export type AddType<T> = Omit<
+    T,
+    'createdDate' | 'createdBy' | 'modifiedDate' | 'modifiedBy' | 'isDeleted' | 'companyId'
+>;
+
+export type UpdateType<T> = AddType<T>;
+export abstract class AggregateRoot<T extends { id: number }> {
+    protected entity: T;
+
+    get id() {
+        return this.entity.id;
+    }
+
+    constructor(entity: Partial<T>) {
+        Object.assign(this.entity, entity);
+    }
+
+    toEntity() {
+        return this.entity;
+    }
 }
 
 export class TenantModel {

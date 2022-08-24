@@ -1,13 +1,12 @@
-import { Controller, Get, Inject, Injectable } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import { Controller, Get, Injectable } from '@nestjs/common';
 import { BaseController } from '~/bases/base.controller';
 import { HealthService } from './health.service';
 
 @Injectable()
 @Controller()
 export class HealthController extends BaseController {
-    constructor(@Inject(REQUEST) request: any, private healthService: HealthService) {
-        super(request);
+    constructor(private healthService: HealthService) {
+        super();
     }
     @Get('health')
     get() {
