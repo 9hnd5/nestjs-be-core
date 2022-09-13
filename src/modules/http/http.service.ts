@@ -4,26 +4,17 @@ import { SuccessResponse } from '~/models/response.model';
 import { storage } from '~/storage';
 import { HTTP_MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
-
-type OverrideOption = Partial<HttpOption> | null;
+import { merge } from 'lodash';
 
 @Injectable()
 export class HttpService {
     constructor(@Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {}
 
-    private getOption(overrideOption: OverrideOption) {
-        const option = this.registerOption ?? ({} as HttpOption);
-        if (overrideOption?.autoInject) {
-            option.autoInject = overrideOption.autoInject;
+    private getOption(overrideOption?: HttpOption) {
+        if (!overrideOption) {
+            return this.registerOption;
         }
-        if (overrideOption?.config) {
-            option.config = overrideOption.config;
-        }
-
-        if (!option) {
-            throw new Error('Please config module before use');
-        }
-
+        const option = merge(this.registerOption, overrideOption);
         return option;
     }
 
@@ -33,7 +24,7 @@ export class HttpService {
      */
     async get<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ): Promise<R> {
         const {
             request: { scopeVariable },
@@ -44,15 +35,11 @@ export class HttpService {
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.get(url, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.get(url, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -86,7 +73,7 @@ export class HttpService {
     async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         body: any,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ) {
         const {
             request: { scopeVariable },
@@ -97,15 +84,11 @@ export class HttpService {
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.post(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.post(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -140,7 +123,7 @@ export class HttpService {
     async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         body: any,
-        overrideOption: OverrideOption = null
+        overrideOption: HttpOption
     ) {
         const {
             request: { scopeVariable },
@@ -151,15 +134,11 @@ export class HttpService {
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.put(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.put(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -194,7 +173,7 @@ export class HttpService {
     async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         body: any,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ) {
         const {
             request: { scopeVariable },
@@ -205,15 +184,11 @@ export class HttpService {
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.patch(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.patch(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -247,7 +222,7 @@ export class HttpService {
      */
     async delete<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ) {
         const {
             request: { scopeVariable },
@@ -258,15 +233,11 @@ export class HttpService {
             if (autoInject) {
                 const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.delete(url, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.delete(url, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
