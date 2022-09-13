@@ -72,7 +72,7 @@ export class HttpService {
      */
     async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
+        body: any = null,
         overrideOption?: HttpOption
     ) {
         const {
@@ -122,7 +122,7 @@ export class HttpService {
      */
     async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
+        body: any = null,
         overrideOption: HttpOption
     ) {
         const {
@@ -172,7 +172,7 @@ export class HttpService {
      */
     async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
+        body: any = null,
         overrideOption?: HttpOption
     ) {
         const {
