@@ -1,7 +1,6 @@
 import { AxiosRequestConfig } from 'axios';
 
-export interface HttpOption {
-    isGlobal?: boolean;
+export class HttpOption {
     autoInject?: boolean;
     config?: AxiosRequestConfig;
 }

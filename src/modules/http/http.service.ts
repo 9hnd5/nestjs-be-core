@@ -1,10 +1,10 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
+import { merge } from 'lodash';
 import { SuccessResponse } from '~/models/response.model';
 import { storage } from '~/storage';
 import { HTTP_MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
-import { merge } from 'lodash';
 
 @Injectable()
 export class HttpService {
@@ -66,15 +66,31 @@ export class HttpService {
         }
     }
 
+    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): R;
+
+    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): R;
+
     /**
      * This method is use to make a http post request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any = null,
+        body?: any,
         overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
@@ -116,18 +132,33 @@ export class HttpService {
         }
     }
 
+    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): Promise<R>;
+    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): Promise<R>;
     /**
      * This method is use to make a http put request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any = null,
-        overrideOption: HttpOption
+        body?: any,
+        overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
+
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
@@ -166,18 +197,33 @@ export class HttpService {
         }
     }
 
+    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): Promise<R>;
+    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): Promise<R>;
     /**
      * This method is use to make a http patch request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any = null,
+        body?: any,
         overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
+
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
