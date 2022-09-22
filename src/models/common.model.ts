@@ -4,24 +4,8 @@ import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 import { merge } from 'lodash';
 import { storage } from '~/storage';
 /**
- * @deprecated in future, please consider use Base instead
+ * @deprecated
  */
-export class BaseModel {
-    @Column({ name: 'is_deleted', type: 'boolean', nullable: false })
-    public isDeleted: boolean;
-
-    @Column({ name: 'created_date', type: 'date', nullable: false })
-    public createdDate: Date;
-
-    @Column({ name: 'created_by', type: 'int', nullable: false })
-    public createdBy: number;
-
-    @Column({ name: 'modified_date', type: 'date', nullable: true })
-    public modifiedDate: Date;
-
-    @Column({ name: 'modified_by', type: 'int', nullable: true })
-    public modifiedBy: number;
-}
 export class Base {
     isDeleted: boolean;
     createdDate: Date;
@@ -29,14 +13,10 @@ export class Base {
     modifiedDate?: Date;
     modifiedBy?: number;
 }
-/**
- * @deprecated in future, please consider use TenantBase instead
- */
-export class TenantBaseModel extends BaseModel {
-    @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
-    public companyId: number;
-}
 
+/**
+ * @deprecated
+ */
 export class TenantBase extends Base {
     public companyId: number;
 }
@@ -107,6 +87,9 @@ export abstract class AggregateRoot<T extends { id: number }> {
     }
 }
 
+/**
+ * @deprecated
+ */
 export class TenantModel {
     @Column({ name: 'company_id', type: 'int', default: -1, nullable: false })
     public companyId: number;
@@ -171,25 +154,6 @@ export class CoreConfigModel {
         issuer?: string;
         expiresIn?: string;
     };
-}
-
-/**
- * @deprecated in future, please consider use QueryBase instead
- */
-export abstract class QueryModel {
-    @Expose()
-    @Transform(({ value }) => (value ? +value : 1))
-    @IsNumber()
-    @Min(1)
-    @IsOptional()
-    pageIndex: number;
-
-    @Expose()
-    @Transform(({ value }) => (value ? +value : 10))
-    @IsNumber()
-    @Max(100)
-    @IsOptional()
-    pageSize: number;
 }
 
 export abstract class QueryBase {

@@ -1,12 +1,3 @@
-/**
- * @deprecated
- */
-export class CoreResponse<T = any> {
-    public result: number;
-    public data: T;
-    public errors: any;
-}
-
 export interface CoreRes<T = any> {
     result: number;
     data: T;
