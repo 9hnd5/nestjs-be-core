@@ -41,7 +41,9 @@ export class TenantBase extends Base {
     public companyId: number;
 }
 
-export abstract class AuditEntity {
+export abstract class BaseEntity {}
+
+export abstract class AuditEntity extends BaseEntity {
     @Column({ name: 'is_deleted', type: Boolean, default: false })
     isDeleted: boolean;
     @Column({ name: 'created_date', type: Date })

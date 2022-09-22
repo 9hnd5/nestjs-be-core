@@ -11,6 +11,9 @@
         "*.md"
     ],
     "scripts": {
+        "migration:generate": "node -r tsconfig-paths/register node_modules/typeorm/cli-ts-node-commonjs.js migration:generate -d src/ds.ts",
+        "migration:run": "node -r tsconfig-paths/register node_modules/typeorm/cli-ts-node-commonjs.js migration:run -d src/ds.ts",
+        "migration:revert": "node -r tsconfig-paths/register node_modules/typeorm/cli-ts-node-commonjs.js migration:revert -d src/ds.ts",
         "prebuild": "rimraf dist",
         "build": "nest build && tsc-alias",
         "build:dev": "rimraf dist && nest build && tsc-alias && yes | cp -rf ./dist ../nestjs-shop-service/node_modules/be-core",
@@ -38,6 +41,7 @@
         "@nestjs/mapped-types": "^1.1.0",
         "@nestjs/passport": "^9.0.0",
         "@nestjs/platform-express": "^9.0.7",
+        "@nestjs/typeorm": "^9.0.1",
         "@types/ioredis": "^4.28.10",
         "axios": "^0.27.2",
         "class-transformer": "^0.5.1",
