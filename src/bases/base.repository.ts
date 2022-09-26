@@ -40,6 +40,16 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
     }
 
     findAndCountBy(options: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]) {
+        if ('length' in options) {
+            if ('isDeleted' in this.properties) {
+                const mapOptions = options.map((x) => ({ ...x, isDeleted: false }));
+                return this.repository.findAndCountBy(mapOptions);
+            }
+        } else {
+            if ('isDeleted' in this.properties) {
+                return this.repository.findAndCountBy(merge(options, { isDeleted: false }));
+            }
+        }
         return this.repository.findAndCountBy(options);
     }
 
@@ -160,13 +170,25 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
      */
     softRemove<T extends DeepPartial<Entity>>(entities: T[]): T[];
     softRemove<T extends DeepPartial<Entity>>(data: T | T[]) {
+        const {
+            request: {
+                scopeVariable: { session },
+            },
+        } = storage.getStore()!;
         if (this.isAuditEntity()) {
             if ('length' in data) {
-                const dataDeleted = data.map((entity) => ({ ...entity, isDeleted: true }));
+                const dataDeleted = data.map((entity) => ({
+                    ...entity,
+                    isDeleted: true,
+                    modifiedBy: session?.userId,
+                    modifiedDate: new Date(),
+                }));
                 this.repository.save(dataDeleted);
                 return dataDeleted;
             } else {
                 data['isDeleted'] = true;
+                data['modifiedBy'] = session?.userId;
+                data['modifiedDate'] = new Date();
                 this.repository.save(data);
                 return data;
             }
