@@ -69,14 +69,13 @@ export class HttpService {
     post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         overrideOption?: HttpOption
-    ): R;
+    ): Promise<R>;
 
     post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         body?: any,
         overrideOption?: HttpOption
-    ): R;
-
+    ): Promise<R>;
     /**
      * This method is use to make a http post request to external api and can override the default config
      * @param overrideOption override config for this method
@@ -85,7 +84,7 @@ export class HttpService {
         url: string,
         body?: any,
         overrideOption?: HttpOption
-    ) {
+    ): Promise<R> {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -149,7 +148,7 @@ export class HttpService {
         url: string,
         body?: any,
         overrideOption?: HttpOption
-    ) {
+    ): Promise<R> {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -214,7 +213,7 @@ export class HttpService {
         url: string,
         body?: any,
         overrideOption?: HttpOption
-    ) {
+    ): Promise<R> {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -269,7 +268,7 @@ export class HttpService {
     async delete<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
         overrideOption?: HttpOption
-    ) {
+    ): Promise<R> {
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
