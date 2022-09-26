@@ -1,8 +1,7 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
-import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 import { merge } from 'lodash';
-import { storage } from '~/storage';
+import { Column } from 'typeorm';
 /**
  * @deprecated
  */
@@ -35,29 +34,29 @@ export abstract class AuditEntity extends BaseEntity {
     @Column({ name: 'modified_by', type: Number, nullable: true })
     modifiedBy?: number;
 
-    @BeforeUpdate()
-    protected beforeUpdate() {
-        const {
-            request: {
-                scopeVariable: { session },
-            },
-        } = storage.getStore()!;
-        this.modifiedDate = new Date();
-        if (typeof session?.userId === 'number') this.modifiedBy = session.userId;
-        else this.modifiedBy = 0;
-    }
+    // @BeforeUpdate()
+    // protected beforeUpdate() {
+    //     const {
+    //         request: {
+    //             scopeVariable: { session },
+    //         },
+    //     } = storage.getStore()!;
+    //     this.modifiedDate = new Date();
+    //     if (typeof session?.userId === 'number') this.modifiedBy = session.userId;
+    //     else this.modifiedBy = 0;
+    // }
 
-    @BeforeInsert()
-    protected beforeInsert() {
-        const {
-            request: {
-                scopeVariable: { session },
-            },
-        } = storage.getStore()!;
-        this.createdDate = new Date();
-        if (typeof session?.userId === 'number') this.createdBy = session.userId;
-        else this.createdBy = 0;
-    }
+    // @BeforeInsert()
+    // protected beforeInsert() {
+    //     const {
+    //         request: {
+    //             scopeVariable: { session },
+    //         },
+    //     } = storage.getStore()!;
+    //     this.createdDate = new Date();
+    //     if (typeof session?.userId === 'number') this.createdBy = session.userId;
+    //     else this.createdBy = 0;
+    // }
 }
 
 export abstract class TenantEntity extends AuditEntity {
