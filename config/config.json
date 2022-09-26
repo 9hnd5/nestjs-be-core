@@ -15,9 +15,9 @@
         "database": "test_{0}"
     },
     "redis": {
-        "host": "172.16.0.110",
+        "host": "172.200.0.200",
         "port": 5001,
-        "password": "abcd1234",
+        "password": "Juve@12345",
         "db": 2
     },
     "tenantSQLConnection": {

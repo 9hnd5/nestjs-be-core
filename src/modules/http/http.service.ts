@@ -1,34 +1,20 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
 import axios, { AxiosResponse } from 'axios';
-import { ScopeVariable } from '~/models/common.model';
+import { merge } from 'lodash';
 import { SuccessResponse } from '~/models/response.model';
+import { storage } from '~/storage';
 import { HTTP_MODULE_OPTIONS_TOKEN } from './const';
 import { HttpOption } from './type';
 
-type OverrideOption = Partial<HttpOption> | null;
-
 @Injectable()
 export class HttpService {
-    public scopeVariable!: ScopeVariable;
+    constructor(@Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {}
 
-    constructor(@Inject(REQUEST) req: any, @Inject(HTTP_MODULE_OPTIONS_TOKEN) private registerOption: HttpOption) {
-        this.scopeVariable = req.scopeVariable;
-    }
-
-    private getOption(overrideOption: OverrideOption) {
-        const option = this.registerOption ?? ({} as HttpOption);
-        if (overrideOption?.autoInject) {
-            option.autoInject = overrideOption.autoInject;
+    private getOption(overrideOption?: HttpOption) {
+        if (!overrideOption) {
+            return this.registerOption;
         }
-        if (overrideOption?.config) {
-            option.config = overrideOption.config;
-        }
-
-        if (!option) {
-            throw new Error('Please config module before use');
-        }
-
+        const option = merge(this.registerOption, overrideOption);
         return option;
     }
 
@@ -38,23 +24,22 @@ export class HttpService {
      */
     async get<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ): Promise<R> {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.get(url, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.get(url, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -81,30 +66,45 @@ export class HttpService {
         }
     }
 
+    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): R;
+
+    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): R;
+
     /**
      * This method is use to make a http post request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
-        overrideOption: OverrideOption = null
+        body?: any,
+        overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.post(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.post(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -132,30 +132,44 @@ export class HttpService {
         }
     }
 
+    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): Promise<R>;
+    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): Promise<R>;
     /**
      * This method is use to make a http put request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
-        overrideOption: OverrideOption = null
+        body?: any,
+        overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
+
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.put(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.put(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -183,30 +197,44 @@ export class HttpService {
         }
     }
 
+    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        overrideOption?: HttpOption
+    ): Promise<R>;
+    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
+        url: string,
+        body?: any,
+        overrideOption?: HttpOption
+    ): Promise<R>;
     /**
      * This method is use to make a http patch request to external api and can override the default config
      * @param overrideOption override config for this method
      */
     async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        body: any,
-        overrideOption: OverrideOption = null
+        body?: any,
+        overrideOption?: HttpOption
     ) {
+        if ('config' in body || 'autoInject' in body) {
+            overrideOption = body;
+            body = null;
+        }
+
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
+
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.patch(url, body, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.patch(url, body, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }
@@ -240,23 +268,22 @@ export class HttpService {
      */
     async delete<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
         url: string,
-        overrideOption: OverrideOption = null
+        overrideOption?: HttpOption
     ) {
+        const {
+            request: { scopeVariable },
+        } = storage.getStore()!;
         const { autoInject, config } = this.getOption(overrideOption);
         try {
             let response = {} as AxiosResponse;
             if (autoInject) {
-                const { requestId, tenantId, tenantCode, accessToken } = this.scopeVariable;
+                const { requestId, tenantId, tenantCode, accessToken } = scopeVariable;
                 if (requestId && tenantId && tenantCode && accessToken) {
-                    response = await axios.delete(url, {
+                    const c = {
                         ...config,
-                        headers: {
-                            requestId,
-                            tenantId,
-                            tenantCode,
-                            accessToken,
-                        },
-                    });
+                        headers: { ...config?.headers, requestId, tenantId, tenantCode, accessToken },
+                    };
+                    response = await axios.delete(url, c);
                 } else {
                     throw new UnauthorizedException('Unauthorize');
                 }

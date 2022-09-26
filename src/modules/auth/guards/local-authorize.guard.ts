@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { includes } from 'lodash';
 import { Session } from '~/models/common.model';
@@ -18,7 +18,7 @@ export class LocalAuthorizeGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const { accessToken, tenantCode } = request.scopeVariable;
         const session = (await this.sessionService.get(accessToken, tenantCode, 'ACCCESS_TOKEN')) as Session;
-        if (!session) return false;
+        if (!session) throw new UnauthorizedException();
         const store = storage.getStore()!;
         store.request.scopeVariable.session = session;
 
@@ -68,6 +68,6 @@ export class LocalAuthorizeGuard implements CanActivate {
             return true;
         }
 
-        return false;
+        throw new UnauthorizedException();
     }
 }

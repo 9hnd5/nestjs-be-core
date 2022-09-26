@@ -22,7 +22,7 @@ export class ExceptionsFilter extends BaseExceptionFilter {
                 for (const m of message) {
                     const index = m.indexOf(' ');
                     const key = m.substring(0, index);
-                    customMessage.push({ [key]: m });
+                    customMessage.push({ field: key, message: m });
                 }
                 customException = new HttpException(new ErrorResponse('Validation Exception', customMessage), status);
             }
