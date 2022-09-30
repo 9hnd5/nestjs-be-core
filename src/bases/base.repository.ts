@@ -204,7 +204,7 @@ export abstract class BaseRepository<Entity extends ObjectLiteral> extends Commo
     }
 }
 
-export abstract class MongoRepository<Entity extends ObjectLiteral> extends CommonRepository<Entity> {
+export abstract class BaseMongoRepository<Entity extends ObjectLiteral> extends CommonRepository<Entity> {
     constructor(manager: EntityManager, target: Target<Entity>) {
         super(manager, target, 'mongo');
     }
