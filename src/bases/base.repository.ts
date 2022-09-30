@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { merge } from 'lodash';
 import {
     DeepPartial,
@@ -12,15 +11,15 @@ import {
     Repository,
     SaveOptions,
 } from 'typeorm';
-import { BaseEntity } from '~/models/common.model';
 import { storage } from '~/storage';
+
 type Target<T = unknown> = new (...args: any[]) => T;
-@Injectable()
-export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
+class CommonRepository<Entity extends ObjectLiteral> {
     protected repository: Repository<Entity>;
     protected properties: ObjectLiteral;
-    constructor(entityManager: EntityManager, target: Target<Entity>) {
-        this.repository = entityManager.getRepository(target);
+    protected constructor(entityManager: EntityManager, target: Target<Entity>, type: 'mongo' | 'sql') {
+        this.repository =
+            type === 'sql' ? entityManager.getRepository(target) : entityManager.getMongoRepository(target);
         this.properties = this.repository.metadata.propertiesMap;
     }
 
@@ -32,6 +31,12 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
         return this.repository.find(options);
     }
 
+    findOne(options: FindOneOptions<Entity>) {
+        if ('isDeleted' in this.properties) {
+            return this.repository.findOne(merge(options, { where: { isDeleted: false } }));
+        }
+    }
+
     findAndCount(options: FindManyOptions<Entity>) {
         if ('isDeleted' in this.properties) {
             return this.repository.findAndCount(merge(options, { where: { isDeleted: false } }));
@@ -40,7 +45,7 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
     }
 
     findAndCountBy(options: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]) {
-        if ('length' in options) {
+        if (Array.isArray(options)) {
             if ('isDeleted' in this.properties) {
                 const mapOptions = options.map((x) => ({ ...x, isDeleted: false }));
                 return this.repository.findAndCountBy(mapOptions);
@@ -51,12 +56,6 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
             }
         }
         return this.repository.findAndCountBy(options);
-    }
-
-    findOne(options: FindOneOptions<Entity>) {
-        if ('isDeleted' in this.properties) {
-            return this.repository.findOne(merge(options, { where: { isDeleted: false } }));
-        }
     }
 
     /**
@@ -145,7 +144,7 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
      */
     remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
     remove(data: Entity[] | Entity, options?: RemoveOptions) {
-        if ('length' in data) {
+        if (Array.isArray(data)) {
             if (this.isAuditEntity()) {
                 return this.softRemove(data);
             }
@@ -194,8 +193,19 @@ export abstract class BaseRepository<Entity extends BaseEntity & { id: any }> {
             }
         } else return new Error('Entity cant be soft delete');
     }
+}
 
-    createQuerybuild(alias?: string, queryRunner?: QueryRunner) {
+export abstract class BaseRepository<Entity extends ObjectLiteral> extends CommonRepository<Entity> {
+    constructor(manager: EntityManager, target: Target<Entity>) {
+        super(manager, target, 'sql');
+    }
+    createQueryBuilder(alias?: string, queryRunner?: QueryRunner) {
         return this.repository.createQueryBuilder(alias, queryRunner);
+    }
+}
+
+export abstract class MongoRepository<Entity extends ObjectLiteral> extends CommonRepository<Entity> {
+    constructor(manager: EntityManager, target: Target<Entity>) {
+        super(manager, target, 'mongo');
     }
 }
