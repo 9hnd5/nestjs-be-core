@@ -1,4 +1,4 @@
-import { merge } from 'lodash';
+import { cloneDeepWith, merge } from 'lodash';
 import {
     DeepPartial,
     EntityManager,
@@ -11,10 +11,12 @@ import {
     Repository,
     SaveOptions,
 } from 'typeorm';
+import { BaseEntity } from '~/models/common.model';
 import { storage } from '~/storage';
 
 type Target<T = unknown> = new (...args: any[]) => T;
-class CommonRepository<Entity extends ObjectLiteral> {
+
+class CommonRepository<Entity extends BaseEntity> {
     protected repository: Repository<Entity>;
     protected properties: ObjectLiteral;
     protected constructor(entityManager: EntityManager, target: Target<Entity>, type: 'mongo' | 'sql') {
@@ -45,77 +47,51 @@ class CommonRepository<Entity extends ObjectLiteral> {
     }
 
     findAndCountBy(options: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]) {
-        if (Array.isArray(options)) {
-            if ('isDeleted' in this.properties) {
-                const mapOptions = options.map((x) => ({ ...x, isDeleted: false }));
-                return this.repository.findAndCountBy(mapOptions);
-            }
+        if (Array.isArray(options) && 'isDeleted' in this.properties) {
+            const mapOptions = options.map((x) => ({ ...x, isDeleted: false }));
+            return this.repository.findAndCountBy(mapOptions);
+        } else if ('isDeleted' in this.properties) {
+            return this.repository.findAndCountBy(merge(options, { isDeleted: false }));
         } else {
-            if ('isDeleted' in this.properties) {
-                return this.repository.findAndCountBy(merge(options, { isDeleted: false }));
-            }
+            return this.repository.findAndCountBy(options);
         }
-        return this.repository.findAndCountBy(options);
     }
 
-    /**
-     *
-     * @param entities Save list of entities
-     * @param options
-     */
-    save<T extends DeepPartial<Entity>>(
-        entities: T[],
-        options: SaveOptions & {
-            reload: false;
-        }
-    ): Promise<T[]>;
-    /**
-     *
-     * @param entities Save list of entities
-     * @param options
-     */
-    save<T extends DeepPartial<Entity>>(entities: T[], options?: SaveOptions): Promise<(T & Entity)[]>;
-    /**
-     *
-     * @param entity Save single entity
-     * @param options
-     */
-    save<T extends DeepPartial<Entity>>(
-        entity: T,
-        options: SaveOptions & {
-            reload: false;
-        }
-    ): Promise<T>;
-    /**
-     *
-     * @param entity Save single entity
-     * @param options
-     */
-    save<T extends DeepPartial<Entity>>(entity: T, options?: SaveOptions): Promise<T & Entity>;
     save<T extends DeepPartial<Entity>>(data: T | T[], options?: SaveOptions | (SaveOptions & { reload: false })) {
-        const {
-            request: {
-                scopeVariable: { session },
-            },
-        } = storage.getStore()!;
-        if ('length' in data) {
-            let mappedData: T[];
-            if (this.isAuditEntity() && !data['id']) {
-                mappedData = data.map((x) => ({ ...x, createdBy: session?.userId, createdDate: new Date() }));
-            } else {
-                mappedData = data.map((x) => ({ ...x, modifiedBy: session?.userId, modifiedDate: new Date() }));
-            }
-            return this.repository.save(mappedData, options);
+        const context = storage.getStore();
+        const userId = context?.request?.scopeVariable?.session?.userId ?? 0;
+        const cloneData = cloneDeepWith(data, function (_, key, ob) {
+            if (key === 'createdBy' && !ob?.['id']) return userId;
+            if (key === 'createdDate' && !ob?.['id']) return new Date();
+            if (key === 'modifiedBy' && ob?.['id']) return userId;
+            if (key === 'modifiedDate' && ob?.['id']) return new Date();
+        });
+        return this.repository.save(cloneData, options);
+    }
+
+    remove(data: Entity | Entity[], options?: RemoveOptions) {
+        if (this.isAuditEntity()) {
+            return this.softRemove(data);
         } else {
-            if (this.isAuditEntity() && !data['id']) {
-                data['createdBy'] = session?.userId;
-                data['createdDate'] = new Date();
+            if (Array.isArray(data)) {
+                return this.repository.remove(data, options);
             } else {
-                data['modifiedBy'] = session?.userId;
-                data['modifiedDate'] = new Date();
+                return this.repository.remove(data);
             }
-            return this.repository.save(data, options);
         }
+    }
+
+    softRemove(data: Entity | Entity[]) {
+        const context = storage.getStore();
+        const userId = context?.request?.scopeVariable?.session?.userId ?? 0;
+
+        const cloneData = cloneDeepWith(data, (_, key) => {
+            if (key === 'isDeleted') return true;
+            if (key === 'modifiedBy') return userId;
+            if (key === 'modifiedDate') return new Date();
+        });
+
+        this.repository.save(cloneData);
     }
 
     private isAuditEntity() {
@@ -127,71 +103,6 @@ class CommonRepository<Entity extends ObjectLiteral> {
         )
             return true;
         return false;
-    }
-
-    /**
-     *
-     * @param entity Remove single entity. If the entity schema have isDeleted column, it will be soft delete, otherwise it will
-     * remove real record in database
-     * @param options option delete from typeorm
-     */
-    remove(entity: Entity, options?: RemoveOptions): Promise<Entity>;
-    /**
-     *
-     * @param entities Remove list of entity. If the entity schema have isDeleted column, it will be soft delete, otherwise it will
-     * remove real record in database
-     * @param options option delete from typeorm
-     */
-    remove(entities: Entity[], options?: RemoveOptions): Promise<Entity[]>;
-    remove(data: Entity[] | Entity, options?: RemoveOptions) {
-        if (Array.isArray(data)) {
-            if (this.isAuditEntity()) {
-                return this.softRemove(data);
-            }
-            return this.repository.remove(data, options);
-        } else {
-            if (this.isAuditEntity()) {
-                return this.softRemove(data);
-            }
-            return this.repository.remove(data, options);
-        }
-    }
-    /**
-     *
-     * @param entity Soft delete single entity, mark column isDeleted = true, it required that the entity schema must have
-     * column isDeleted
-     */
-    softRemove<T extends DeepPartial<Entity>>(entity: T): T;
-    /**
-     *
-     * @param entities Soft delete list of entity, mark column isDeleted = true, it required that the entity schema must have
-     * column isDeleted
-     */
-    softRemove<T extends DeepPartial<Entity>>(entities: T[]): T[];
-    softRemove<T extends DeepPartial<Entity>>(data: T | T[]) {
-        const {
-            request: {
-                scopeVariable: { session },
-            },
-        } = storage.getStore()!;
-        if (this.isAuditEntity()) {
-            if ('length' in data) {
-                const dataDeleted = data.map((entity) => ({
-                    ...entity,
-                    isDeleted: true,
-                    modifiedBy: session?.userId,
-                    modifiedDate: new Date(),
-                }));
-                this.repository.save(dataDeleted);
-                return dataDeleted;
-            } else {
-                data['isDeleted'] = true;
-                data['modifiedBy'] = session?.userId;
-                data['modifiedDate'] = new Date();
-                this.repository.save(data);
-                return data;
-            }
-        } else return new Error('Entity cant be soft delete');
     }
 }
 

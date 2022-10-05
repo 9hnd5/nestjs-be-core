@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AuditEntity } from '~/models/common.model';
+import { OrderItemEntity } from '~/modules/order/entities/order-item.entity';
 
 @Entity('order')
 export class OrderEntity extends AuditEntity {
@@ -11,4 +12,7 @@ export class OrderEntity extends AuditEntity {
 
     @Column({ type: Number })
     totalDiscount: number;
+
+    @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order, { eager: true, cascade: true })
+    items: OrderItemEntity[];
 }

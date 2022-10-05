@@ -1,7 +1,7 @@
 import { Expose, Transform } from 'class-transformer';
 import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { merge } from 'lodash';
-import { Column } from 'typeorm';
+import { Column, DeleteDateColumn } from 'typeorm';
 /**
  * @deprecated
  */
@@ -20,9 +20,17 @@ export class TenantBase extends Base {
     public companyId: number;
 }
 
-export abstract class BaseEntity {}
+export class BaseEntity {}
 
-export abstract class AuditEntity extends BaseEntity {
+export class AuditEntity extends BaseEntity {
+    constructor() {
+        super();
+        this.isDeleted = false;
+        this.createdBy = 0;
+        this.createdDate = new Date();
+        this.modifiedBy = undefined;
+        this.modifiedDate = undefined;
+    }
     @Column({ name: 'is_deleted', type: Boolean, default: false })
     isDeleted: boolean;
     @Column({ name: 'created_date', type: Date })
@@ -36,26 +44,34 @@ export abstract class AuditEntity extends BaseEntity {
 
     // @BeforeUpdate()
     // protected beforeUpdate() {
-    //     const {
-    //         request: {
-    //             scopeVariable: { session },
-    //         },
-    //     } = storage.getStore()!;
-    //     this.modifiedDate = new Date();
-    //     if (typeof session?.userId === 'number') this.modifiedBy = session.userId;
-    //     else this.modifiedBy = 0;
+    //     const store = storage.getStore();
+    //     if (store && store.request && store.request?.scopeVariable) {
+    //         console.log('store', store);
+
+    //         const {
+    //             request: {
+    //                 scopeVariable: { session },
+    //             },
+    //         } = store;
+    //         this.modifiedDate = new Date();
+    //         if (typeof session?.userId === 'number') this.modifiedBy = session.userId;
+    //         else this.modifiedBy = 0;
+    //     }
     // }
 
     // @BeforeInsert()
     // protected beforeInsert() {
-    //     const {
-    //         request: {
-    //             scopeVariable: { session },
-    //         },
-    //     } = storage.getStore()!;
-    //     this.createdDate = new Date();
-    //     if (typeof session?.userId === 'number') this.createdBy = session.userId;
-    //     else this.createdBy = 0;
+    //     const store = storage.getStore();
+    //     if (store && store.request && store.request?.scopeVariable) {
+    //         const {
+    //             request: {
+    //                 scopeVariable: { session },
+    //             },
+    //         } = store;
+    //         this.createdDate = new Date();
+    //         if (typeof session?.userId === 'number') this.createdBy = session.userId;
+    //         else this.createdBy = 0;
+    //     }
     // }
 }
 

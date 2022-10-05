@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BaseEntity } from '~/models/common.model';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AuditEntity } from '~/models/common.model';
+import { OrderEntity } from '~/modules/order/entities/order.entity';
 
 @Entity('order-item')
-export class OrderItemEntity extends BaseEntity {
+export class OrderItemEntity extends AuditEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -14,4 +15,8 @@ export class OrderItemEntity extends BaseEntity {
 
     @Column({ type: String })
     description: string;
+
+    @JoinColumn({ name: 'order_id' })
+    @ManyToOne(() => OrderEntity, (order) => order.items, { orphanedRowAction: 'delete' })
+    order: OrderEntity;
 }
