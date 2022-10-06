@@ -81,7 +81,7 @@ class CommonRepository<Entity extends BaseEntity> {
         }
     }
 
-    softRemove(data: Entity | Entity[]) {
+    private softRemove(data: Entity | Entity[]) {
         const context = storage.getStore();
         const userId = context?.request?.scopeVariable?.session?.userId ?? 0;
 
@@ -107,11 +107,18 @@ class CommonRepository<Entity extends BaseEntity> {
 }
 
 export abstract class BaseRepository<Entity extends ObjectLiteral> extends CommonRepository<Entity> {
-    constructor(manager: EntityManager, target: Target<Entity>) {
+    constructor(manager: EntityManager, private target: Target<Entity>) {
         super(manager, target, 'sql');
     }
     createQueryBuilder(alias?: string, queryRunner?: QueryRunner) {
         return this.repository.createQueryBuilder(alias, queryRunner);
+    }
+
+    withManager(manager: EntityManager) {
+        const thisRepo = this.constructor as new (...args: any[]) => typeof this;
+        const { target } = this;
+        const cls = new (class extends thisRepo {})(manager, target);
+        return cls as typeof this;
     }
 }
 
