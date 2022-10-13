@@ -22,10 +22,7 @@ export class HttpService {
      * This method is use to make a http get request to external api and can override the default config
      * @param overrideOption override config for this method
      */
-    async get<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        overrideOption?: HttpOption
-    ): Promise<R> {
+    async get<T = any>(url: string, overrideOption?: HttpOption) {
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
@@ -47,8 +44,10 @@ export class HttpService {
                 response = await axios.get(url, config);
             }
             const { data } = response;
-
-            return data as R;
+            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            else {
+                return new SuccessResponse<T>(data);
+            }
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -66,25 +65,7 @@ export class HttpService {
         }
     }
 
-    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-
-    post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-    /**
-     * This method is use to make a http post request to external api and can override the default config
-     * @param overrideOption override config for this method
-     */
-    async post<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R> {
+    async post<T = any>(url: string, body?: any, overrideOption?: HttpOption) {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -112,8 +93,10 @@ export class HttpService {
             }
 
             const { data } = response;
-
-            return data as R;
+            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            else {
+                return new SuccessResponse<T>(data);
+            }
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -131,24 +114,7 @@ export class HttpService {
         }
     }
 
-    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-    put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-    /**
-     * This method is use to make a http put request to external api and can override the default config
-     * @param overrideOption override config for this method
-     */
-    async put<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R> {
+    async put<T = any>(url: string, body?: any, overrideOption?: HttpOption) {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -177,8 +143,10 @@ export class HttpService {
             }
 
             const { data } = response;
-
-            return data as R;
+            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            else {
+                return new SuccessResponse<T>(data);
+            }
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -196,24 +164,7 @@ export class HttpService {
         }
     }
 
-    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-    patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R>;
-    /**
-     * This method is use to make a http patch request to external api and can override the default config
-     * @param overrideOption override config for this method
-     */
-    async patch<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        body?: any,
-        overrideOption?: HttpOption
-    ): Promise<R> {
+    async patch<T = any>(url: string, body?: any, overrideOption?: HttpOption) {
         if ('config' in body || 'autoInject' in body) {
             overrideOption = body;
             body = null;
@@ -242,8 +193,10 @@ export class HttpService {
             }
 
             const { data } = response;
-
-            return data as R;
+            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            else {
+                return new SuccessResponse<T>(data);
+            }
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -261,14 +214,7 @@ export class HttpService {
         }
     }
 
-    /**
-     * This method is use to make a http delete request to external api and can override the default config
-     * @param overrideOption override config for this method
-     */
-    async delete<T = any, R = T extends Record<string, any> | number | string | boolean ? SuccessResponse<T> : T>(
-        url: string,
-        overrideOption?: HttpOption
-    ): Promise<R> {
+    async delete<T = any>(url: string, overrideOption?: HttpOption) {
         const {
             request: { scopeVariable },
         } = storage.getStore()!;
@@ -291,8 +237,10 @@ export class HttpService {
             }
 
             const { data } = response;
-
-            return data as R;
+            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            else {
+                return new SuccessResponse<T>(data);
+            }
         } catch (error) {
             if (error.response) {
                 // The request was made and the server responded with a status code
