@@ -1,13 +1,9 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import * as child from 'child_process';
-import * as fs from 'fs';
-import { isArray, isEmpty } from 'lodash';
+import { isArray } from 'lodash';
 import * as mysql from 'mysql2/promise';
-import * as path from 'path';
-import * as util from 'util';
+import { DataSource } from 'typeorm';
 import { get } from '~/config';
 
-const exec = util.promisify(child.exec);
 const tenantOption = get('tenantSQLConnection');
 const tenantPool = mysql.createPool({
     host: tenantOption['host'],
@@ -24,49 +20,42 @@ const servicePool = mysql.createPool({
     password: serviceOption['password'],
 });
 
-export const migration = async (tenantCode: string, entities: string, dirname: string = __dirname) => {
+export const migration = async (tenantCode: string) => {
     const conn = await servicePool.getConnection();
-    const [response] = await conn.execute(`SHOW DATABASES LIKE 'comatic_${tenantCode}'`);
-    if (isEmpty(response)) {
-        try {
-            //Try create database first
-            await conn.execute(
-                `CREATE DATABASE IF NOT EXISTS \`comatic_${tenantCode}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
-            );
-            //Generate migration schema
-            const generateCommand = `npx typeorm migration:generate -o -d ${dirname}/ds.js migra/initDB -- tenantCode=${tenantCode} entities=${entities}`;
-            const generateResult = await exec(generateCommand, {
-                cwd: dirname,
-            });
-            console.log(generateResult.stdout);
-            console.log(generateResult.stderr);
-
-            const migrationCommand = `npx typeorm migration:run -d ${dirname}/ds.js -- tenantCode=${tenantCode} entities=${entities}`;
-            const migrationResult = await exec(migrationCommand, {
-                cwd: dirname,
-            });
-            console.log(migrationResult.stdout);
-            console.log(migrationResult.stderr);
-
-            fs.rm(path.resolve(dirname, 'migra'), { recursive: true, maxRetries: 5 }, (e) => {});
-        } catch (er) {
-            //If there are any error occur. Rollback by remove the database was created before
-            await conn.execute(`DROP DATABASE IF EXISTS \`comatic_${tenantCode}\`;`);
-            throw new InternalServerErrorException(er);
-        } finally {
-            conn.release();
-        }
-    } else {
+    const dataSource = new DataSource({
+        type: 'mysql',
+        host: 'localhost',
+        port: 3306,
+        username: 'root',
+        password: '',
+        database: `comatic_${tenantCode}`,
+        migrations: [__dirname + '/migrations/*.{ts,js}'],
+        synchronize: false,
+    });
+    try {
+        //Try create database first
+        await conn.execute(
+            `CREATE DATABASE IF NOT EXISTS \`comatic_${tenantCode}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
+        );
+        await dataSource.initialize();
+        await dataSource.runMigrations();
+    } catch (er) {
+        //If there are any error occur. Rollback by remove the database was created before
+        throw new InternalServerErrorException(er);
+    } finally {
         conn.release();
+        await dataSource.destroy();
     }
 };
 
-export const applyMigration = async (entities: string) => {
+export const applyMigration = async () => {
     const conn = await tenantPool.getConnection();
     const [rows] = await conn.query('select * from saaspiens_company');
+
     if (isArray(rows)) {
         for (const { code } of rows as Array<{ code: string }>) {
-            await migration(code, entities);
+            await migration(code);
+            // break;
         }
     }
     conn.release();

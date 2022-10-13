@@ -1,3 +1,3 @@
 export interface MigrationOption {
-    entities: string;
+    migrationDir: string;
 }

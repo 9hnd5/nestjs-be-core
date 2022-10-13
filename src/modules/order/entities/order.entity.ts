@@ -13,6 +13,9 @@ export class OrderEntity extends AuditEntity {
     @Column({ type: Number })
     totalDiscount: number;
 
+    @Column({ type: String })
+    note: string;
+
     @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order, { eager: true, cascade: true })
     items: OrderItemEntity[];
 }
