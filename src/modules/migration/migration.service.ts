@@ -39,6 +39,13 @@ export class MigrationService implements OnModuleInit {
     }
 
     private async applyMigration() {
+        if (this.option.tenantCodes) {
+            for (const code of this.option.tenantCodes) {
+                await this.migration(code);
+            }
+            return;
+        }
+
         const conn = await this.tenantPool.getConnection();
         const [rows] = await conn.query('select * from saaspiens_company');
 

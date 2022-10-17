@@ -44,7 +44,7 @@ export class HttpService {
                 response = await axios.get(url, config);
             }
             const { data } = response;
-            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            if (data && 'result' in data && 'data' in data) return data as SuccessResponse<T>;
             else {
                 return new SuccessResponse<T>(data);
             }
@@ -93,7 +93,7 @@ export class HttpService {
             }
 
             const { data } = response;
-            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            if (data && 'result' in data && 'data' in data) return data as SuccessResponse<T>;
             else {
                 return new SuccessResponse<T>(data);
             }
@@ -143,7 +143,7 @@ export class HttpService {
             }
 
             const { data } = response;
-            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            if (data && 'result' in data && 'data' in data) return data as SuccessResponse<T>;
             else {
                 return new SuccessResponse<T>(data);
             }
@@ -193,7 +193,7 @@ export class HttpService {
             }
 
             const { data } = response;
-            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            if (data && 'result' in data && 'data' in data) return data as SuccessResponse<T>;
             else {
                 return new SuccessResponse<T>(data);
             }
@@ -237,7 +237,7 @@ export class HttpService {
             }
 
             const { data } = response;
-            if ('result' in data && 'data' in data) return data as SuccessResponse<T>;
+            if (data && 'result' in data && 'data' in data) return data as SuccessResponse<T>;
             else {
                 return new SuccessResponse<T>(data);
             }
