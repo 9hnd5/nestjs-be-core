@@ -4,9 +4,8 @@ import { storage } from '~/storage';
 
 @Injectable()
 export class BaseController {
-    public readonly scopeVariable: ScopeVariable;
-    constructor() {
+    public get scopeVariable(): ScopeVariable {
         const store = storage.getStore()!;
-        this.scopeVariable = store.request.scopeVariable;
+        return store.request.scopeVariable;
     }
 }
