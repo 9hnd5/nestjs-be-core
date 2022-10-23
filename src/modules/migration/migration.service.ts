@@ -59,21 +59,22 @@ export class MigrationService implements OnModuleInit {
     }
 
     private async migration(tenantCode: string) {
+        const db: string = serviceOption['db'].replace(/{0}/g, tenantCode);
         const conn = await this.servicePool.getConnection();
         const dataSource = new DataSource({
-            type: 'mysql',
-            host: 'localhost',
-            port: 3306,
-            username: 'root',
-            password: '',
-            database: `comatic_${tenantCode}`,
+            type: serviceOption['type'],
+            host: serviceOption['host'],
+            port: serviceOption['port'],
+            password: serviceOption['password'],
+            username: serviceOption['username'],
+            database: db,
             migrations: [this.option.migrationDir],
             synchronize: false,
         });
         try {
             //Try create database first
             await conn.execute(
-                `CREATE DATABASE IF NOT EXISTS \`comatic_${tenantCode}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
+                `CREATE DATABASE IF NOT EXISTS \`${db}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
             );
             await dataSource.initialize();
             await dataSource.runMigrations();
