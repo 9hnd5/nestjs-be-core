@@ -62,7 +62,7 @@ export class MigrationService implements OnModuleInit {
     }
 
     private async migration(tenantCode: string) {
-        const db: string = this.serviceOption['password'].replace(/{0}/g, tenantCode);
+        const db: string = this.serviceOption['database'].replace('{0}', tenantCode);
         const conn = await this.servicePool.getConnection();
         const dataSource = new DataSource({
             type: this.serviceOption['type'],
