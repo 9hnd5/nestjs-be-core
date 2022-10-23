@@ -77,7 +77,7 @@ export class MigrationService implements OnModuleInit {
         try {
             //Try create database first
             await conn.execute(
-                `CREATE DATABASE IF NOT EXISTS \`${db}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;`
+                `CREATE DATABASE IF NOT EXISTS \`${db}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
             );
             await dataSource.initialize();
             await dataSource.runMigrations();
