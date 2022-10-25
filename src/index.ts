@@ -44,7 +44,6 @@ export * from '~/modules/initial/initial.module';
 //MailModule
 export * from '~/modules/mail/mail.module';
 export * from '~/modules/mail/mail.service';
-export * from '~/modules/migration/migration.controller';
 export * from '~/modules/migration/migration.module';
 export * from '~/modules/migration/migration.service';
 //Session module
